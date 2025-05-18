@@ -1,30 +1,23 @@
 from flask import Flask, render_template, request, redirect
-from flask_sqlalchemy import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///animeshelf.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+CORS(app)
 
-db = SQLAlchemy(app)
 
-class Media(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
+media_list = [
+    {"id": 1, "title": "Attack on Titan"},
+    {"id": 2, "title": "Fullmetal Alchemist"}
+]
 
 @app.route('/')
-def index():
-    media_list = Media.query.all()
-    return render_template('index.html', media_list=media_list)
+def home():
+    return "AnimeShelf backend is running!"
 
-@app.route('/add', methods=['POST'])
-def add():
-    title = request.form['title']
-    if title:
-        new_media = Media(title=title)
-        db.session.add(new_media)
-        db.session.commit()
-    return redirect('/')
+@app.route('/media', methods=['GET'])
+def get_media():
+    return jsonify(media_list)
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
+    app.run(debug=True, port=8080)

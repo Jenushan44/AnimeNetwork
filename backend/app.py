@@ -37,6 +37,9 @@ def get_list():
     # converts the python code into JSON so the frontend can understand it
     return jsonify(result), 200
 
+#@app.route('/add', methods=['PUT'])
+#def add_list():
+
 
 # Creates table defined on Anime(db.Model)
 if __name__ == '__main__':

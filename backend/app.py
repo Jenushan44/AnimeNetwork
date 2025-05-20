@@ -1,20 +1,16 @@
 from flask import Flask
+from flask import request, abort
 from flask import jsonify 
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from models import Anime 
+from extensions import db
 
 app = Flask(__name__)
-CORS(app, origins=["https://localhost:3000"])
+CORS(app, origins=["http://localhost:3000"])
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///animes.db'
 
-db = SQLAlchemy(app) 
-
-class Anime(db.Model): 
-    id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(100), nullable=False)
-    genre = db.Column(db.String(100), nullable=False)
-    score = db.Column(db.Integer, nullable=True)
+db.init_app(app) 
 
 @app.route('/')
 def home():
@@ -22,24 +18,39 @@ def home():
 
 @app.route('/list', methods=['GET'])
 def get_list():
-    # Gets all the rows from the table 
+    # Fetches data from the database 
     show_list = Anime.query.all()
-
     result = []
-    for show in show_list: 
+    for item in show_list: 
         result.append({
-            'id: ': show.id, 
-            'Title: ': show.title, 
-            'Genre: ': show.genre, 
-            'Score: ': show.score
+            'id': item.id, 
+            'Title': item.title, 
+            'Genre': item.genre, 
+            'Score': item.score
         })
-    
-    # converts the python code into JSON so the frontend can understand it
     return jsonify(result), 200
 
-#@app.route('/add', methods=['PUT'])
-#def add_list():
+@app.route('/list', methods=['POST'])
+def add_list():
+    # Gets JSON data from body of incoming HTTP request to store in data variable 
+    data = request.get_json()
+    new_item = Anime(
+        title=data['title'],
+        genre=data['genre'],
+        score=data['score']
+    )
+    db.session.add(new_item)
+    db.session.commit()
+    return jsonify({'message': 'Anime entry added'}), 201 
 
+@app.route('/list/<int:show_id>', methods=['DELETE'])
+def delete_list(show_id):
+    item = Anime.query.get(show_id)
+    if not item:
+        abort(404, description="Anime not found") 
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({'message': 'Anime deleted'}), 200
 
 # Creates table defined on Anime(db.Model)
 if __name__ == '__main__':

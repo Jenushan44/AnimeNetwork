@@ -45,12 +45,31 @@ def add_list():
 
 @app.route('/list/<int:show_id>', methods=['DELETE'])
 def delete_list(show_id):
+    # Find anime entry in database with id 
     item = Anime.query.get(show_id)
     if not item:
         abort(404, description="Anime not found") 
     db.session.delete(item)
     db.session.commit()
     return jsonify({'message': 'Anime deleted'}), 200
+
+@app.route('/search', methods=['GET'])
+def show_anime():
+    title = request.args.get('title')
+    
+    query = f"""
+    {{
+        Media(search: "{title}") {{
+        title {{ romaji }}
+        episodes
+        format 
+        coverImage {{ large }}
+        }}
+    }}
+    """
+    return jsonify({'query': query}), 200
+ 
+    
 
 # Creates table defined on Anime(db.Model)
 if __name__ == '__main__':

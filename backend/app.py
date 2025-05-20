@@ -1,9 +1,10 @@
 from flask import Flask
-from flask import request, abort
+from flask import request, abort 
 from flask import jsonify 
 from flask_cors import CORS
 from models import Anime 
 from extensions import db
+import requests
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:3000"])
@@ -57,6 +58,7 @@ def delete_list(show_id):
 def show_anime():
     title = request.args.get('title')
     
+    
     query = f"""
     {{
         Media(search: "{title}") {{
@@ -67,9 +69,17 @@ def show_anime():
         }}
     }}
     """
-    return jsonify({'query': query}), 200
+    mydict = {"query": query}
+    headers = {"Content-Type": "application/json"}
+    response = requests.post(
+        "https://graphql.anilist.co",
+        json=mydict,
+        headers=headers
+    )
+
+    data = response.json()
+    return jsonify(data), 200
  
-    
 
 # Creates table defined on Anime(db.Model)
 if __name__ == '__main__':

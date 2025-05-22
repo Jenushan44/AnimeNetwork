@@ -2,12 +2,13 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-
+import SearchBar from './SearchBar.js'
 
 function Home() {
   return (
     <div className="App">
       <h1>Welcome to Animeshelf</h1>
+      <SearchBar /> { }
       <Link to='/list'>My List</Link>
     </div>
   );

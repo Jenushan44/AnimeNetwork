@@ -54,6 +54,21 @@ def delete_list(show_id):
     db.session.commit()
     return jsonify({'message': 'Anime deleted'}), 200
 
+@app.route('/media', methods=['POST'])
+def save_media():
+    data = request.get_json()
+    print("Success", data)
+
+    new_item = Anime(
+        title=data["title"],
+        genre=data["genre"],
+        score=data["score"]
+    )
+
+    db.session.add(new_item)
+    db.session.commit()
+    return jsonify({'message': 'saved'}), 201
+
 @app.route('/search', methods=['GET'])
 def show_anime():
     title = request.args.get('title')

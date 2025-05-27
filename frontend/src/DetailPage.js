@@ -24,6 +24,20 @@ const query = `
 const DetailPage = () => {
   const { id } = useParams()
   const [valueData, setValueData] = useState(null);
+  const handleAddShelf = async () => {
+    const res = await fetch("http://localhost:5000/media", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: valueData.title.romaji,
+        genre: "N/A",
+        score: valueData.episodes
+      })
+    });
+  }
+
   useEffect(() => {
     const fetchAnime = async () => {
       try {
@@ -61,6 +75,7 @@ const DetailPage = () => {
           <img src={valueData.coverImage.large} alt={valueData.title.romaji} />
         </div>
       )}
+      <button onClick={handleAddShelf}>Add to Shelf</button>
     </div>
   );
 }

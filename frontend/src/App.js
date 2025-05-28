@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import SearchBar from './SearchBar.js'
 import DetailPage from './DetailPage.js'
+import { useState, useEffect } from 'react'
 
 function Home() {
   return (
@@ -16,10 +17,26 @@ function Home() {
 }
 
 function List() {
+  const [mediaList, setMediaList] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:5000/list");
+      const data = await response.json();
+      console.log("ACTUAL data returned from /list:", data);
+      setMediaList(data);
+    }
+    fetchData();
+  }, []);
+
   return (
     <div>
       <h1>Show List</h1>
-      { }
+      {mediaList.map((media, index) => (
+        <div key={index}>
+          {media.title} - Genre: {media.genre} - Score: {media.score}
+        </div>
+      ))}
       <Link to="/">Back to Home</Link>
     </div>
   );

@@ -25,9 +25,9 @@ def get_list():
     for item in show_list: 
         result.append({
             'id': item.id, 
-            'Title': item.title, 
-            'Genre': item.genre, 
-            'Score': item.score
+            'title': item.title, 
+            'genre': item.genre, 
+            'score': item.score
         })
     return jsonify(result), 200
 

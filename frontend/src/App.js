@@ -18,6 +18,10 @@ function Home() {
 
 function List() {
   const [mediaList, setMediaList] = useState([])
+  const handleDelete = (idDelete) => {
+    const updateList = mediaList.filter((media) => media.id != idDelete)
+    setMediaList(updateList)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,12 +33,15 @@ function List() {
     fetchData();
   }, []);
 
+
+
   return (
     <div>
       <h1>Show List</h1>
-      {mediaList.map((media, index) => (
-        <div key={index}>
+      {mediaList.map((media) => (
+        <div key={media.id}>
           {media.title} - Genre: {media.genre} - Score: {media.score}
+          <button onClick={() => handleDelete(media.id)}>Delete</button>
         </div>
       ))}
       <Link to="/">Back to Home</Link>

@@ -69,6 +69,19 @@ def save_media():
     db.session.commit()
     return jsonify({'message': 'saved'}), 201
 
+@app.route('/list/<int:show_id>', methods=['PUT'])
+def update_score(show_id): 
+    item = Anime.query.get(show_id)
+    if not item:
+        return jsonify({"error": "Not found"}), 404
+    data = request.get_json()
+    new_score = data.get("score")
+
+    item.score = new_score 
+    db.session.commit()
+    return jsonify({'message': 'saved'}), 200
+
+
 @app.route('/search', methods=['GET'])
 def show_anime():
     title = request.args.get('title')
@@ -96,7 +109,6 @@ def show_anime():
     return jsonify(data), 200
  
 
-# Creates table defined on Anime(db.Model)
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

@@ -3,7 +3,7 @@ from extensions import db
 
 class Anime(db.Model): 
     id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(100), nullable=False)
+    title = db.Column(db.String(100), nullable=False, unique=True)
     genre = db.Column(db.String(100), nullable=False)
     score = db.Column(db.Integer, nullable=True)
     status = db.Column(db.String(50))

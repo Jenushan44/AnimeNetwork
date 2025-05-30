@@ -4,6 +4,8 @@ from flask import jsonify
 from flask_cors import CORS
 from models import Anime 
 from extensions import db
+from sqlalchemy.exc import IntegrityError
+
 import requests
 
 app = Flask(__name__)
@@ -67,9 +69,14 @@ def save_media():
         status=data.get("status", "Watching")
     )
 
-    db.session.add(new_item)
-    db.session.commit()
-    return jsonify({'message': 'saved'}), 201
+    try:         
+        db.session.add(new_item)
+        db.session.commit()
+        return jsonify({'message': 'saved'}), 201
+    except IntegrityError: #Error when breaking database rules
+        db.session.rollback() # Changes back to state before adding show
+        return jsonify({'message': 'Anime already in list'}), 400 
+
 
 @app.route('/list/<int:show_id>', methods=['PUT'])
 def update_score(show_id): 

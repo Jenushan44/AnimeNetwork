@@ -78,6 +78,12 @@ function List() {
           <option value="Plan to watch">Plan to watch</option>
           <option value="Dropped">Dropped</option>
         </select>
+
+        <select>
+          <option value="Title">Title</option>
+          <option value="Score">Score</option>
+        </select>
+
       </form>
 
       {filteredList.map((media) => (

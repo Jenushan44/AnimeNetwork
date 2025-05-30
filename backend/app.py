@@ -27,7 +27,8 @@ def get_list():
             'id': item.id, 
             'title': item.title, 
             'genre': item.genre, 
-            'score': item.score
+            'score': item.score,
+            'status': item.status
         })
     return jsonify(result), 200
 
@@ -38,7 +39,8 @@ def add_list():
     new_item = Anime(
         title=data['title'],
         genre=data['genre'],
-        score=data['score']
+        score=data['score'],
+        status=data.get("status", "Watching")
     )
     db.session.add(new_item)
     db.session.commit()
@@ -46,12 +48,11 @@ def add_list():
 
 @app.route('/list/<int:show_id>', methods=['DELETE'])
 def delete_list(show_id):
-    # Find anime entry in database with id 
-    item = Anime.query.get(show_id)
+    item = Anime.query.get(show_id) # Find anime entry in database with id 
     if not item:
         abort(404, description="Anime not found") 
-    db.session.delete(item)
-    db.session.commit()
+    db.session.delete(item) # deletes show entry with same anime id
+    db.session.commit() # commit changes to database 
     return jsonify({'message': 'Anime deleted'}), 200
 
 @app.route('/media', methods=['POST'])
@@ -62,7 +63,8 @@ def save_media():
     new_item = Anime(
         title=data["title"],
         genre=data["genre"],
-        score=data["score"]
+        score=data["score"],
+        status=data.get("status", "Watching")
     )
 
     db.session.add(new_item)
@@ -76,8 +78,10 @@ def update_score(show_id):
         return jsonify({"error": "Not found"}), 404
     data = request.get_json()
     new_score = data.get("score")
+    new_status = data.get("status")
+    item.score = new_score
+    item.status = new_status 
 
-    item.score = new_score 
     db.session.commit()
     return jsonify({'message': 'saved'}), 200
 

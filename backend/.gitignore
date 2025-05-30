@@ -4,3 +4,4 @@ __pychache__/
 instance/
 *.db
 test_db.py
+reset_db.py

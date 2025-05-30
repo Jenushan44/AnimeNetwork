@@ -20,6 +20,8 @@ function List() {
   const [mediaList, setMediaList] = useState([]);
   const [editId, setEditId] = useState('');
   const [editScore, setScoreId] = useState('');
+  const [editStatus, setStatus] = useState('');
+  const [filterStatus, editFilterStatus] = useState("All")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +36,7 @@ function List() {
     await fetch(`http://localhost:5000/list/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ score: Number(editScore) }),
+      body: JSON.stringify({ score: Number(editScore), status: editStatus }),
     });
     setEditId("");
     setScoreId("");
@@ -57,10 +59,28 @@ function List() {
     setMediaList(updateList);
   };
 
+  const filteredList = filterStatus === "All"
+    ? mediaList // if true condition to check if filterStatus is All
+    : mediaList.filter((media) => media.status === filterStatus); // else condition to filter for other states
+
+
+
   return (
     <div>
+
       <h1>Show List</h1>
-      {mediaList.map((media) => (
+      <form>
+        <select value={filterStatus} onChange={(e) => editFilterStatus(e.target.value)}>
+          <option value="All">All</option>
+          <option value="Completed">Completed</option>
+          <option value="Watching">Watching</option>
+          <option value="On Hold">On Hold</option>
+          <option value="Plan to watch">Plan to watch</option>
+          <option value="Dropped">Dropped</option>
+        </select>
+      </form>
+
+      {filteredList.map((media) => (
         <div key={media.id}>
           {editId == media.id ? (
             <form
@@ -86,17 +106,29 @@ function List() {
                 setEditId("");
                 setScoreId("");
               }}>Cancel</button>
+
+              <select value={editStatus} onChange={(e) => setStatus(e.target.value)}>
+                <option value="Watching">Watching</option>
+                <option value="Completed">Completed</option>
+                <option value="Plan to watch">Plan to watch</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Dropped">Dropped</option>
+              </select>
+
             </form>
+
           ) : (
             <p>
-              {media.title} - Genre: {media.genre} - Score: {media.score}
+              {media.title} - Genre: {media.genre} - Score: {media.score} - Status: {media.status}
             </p>
           )}
           <button onClick={() => {
             setEditId(media.id);
             setScoreId(media.score.toString());
+            setStatus(media.status);
           }}>Edit</button>
           <button onClick={() => handleDelete(media.id)}>Delete</button>
+
         </div>
       ))}
       <Link to="/">Back to Home</Link>

@@ -19,12 +19,14 @@ function Home() {
 function ProfilePage() {
 
   const [totalTime, setTotalTime] = useState(0)
+  const [totalEpisodes, setTotalEpisode] = useState(0)
 
   useEffect(() => { // When profile page shows up run this (useEffect)
     async function fetchData() {
       const result = await fetch("http://localhost:5000/profile")  // Sends a GET request to Flask backend at /profile and retrieves all data 
       const data = await result.json()
       setTotalTime(data.total)
+      setTotalEpisode(data.episodes)
     }
     fetchData();
 
@@ -33,7 +35,8 @@ function ProfilePage() {
   return (
     <div>
       <h1>Profile Page</h1>
-      <p>Total time watched: {totalTime} minutes</p>
+      <p>Days Watched: {totalTime} days</p>
+      <p>Episodes Watched: {totalEpisodes} episodes</p>
     </div>
   );
 }

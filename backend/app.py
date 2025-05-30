@@ -42,7 +42,8 @@ def add_list():
         title=data['title'],
         genre=data['genre'],
         score=data['score'],
-        status=data.get("status", "Watching")
+        status=data.get("status", "Watching"),
+        episodes=data["episodes"]
     )
     db.session.add(new_item)
     db.session.commit()
@@ -66,7 +67,9 @@ def save_media():
         title=data["title"],
         genre=data["genre"],
         score=data["score"],
-        status=data.get("status", "Watching")
+        status=data.get("status", "Watching"),
+        episodes=data["episodes"]
+
     )
 
     try:         
@@ -92,6 +95,20 @@ def update_score(show_id):
     db.session.commit()
     return jsonify({'message': 'saved'}), 200
 
+@app.route('/profile', methods=['GET'])
+def view_profile(): 
+    show_list = Anime.query.all()
+    time_watched = 0
+    episodes_watched = 0
+    for show in show_list: 
+        time_watched += show.episodes * 24
+        episodes_watched += show.episodes
+    total_days = round(time_watched/1440, 2)
+    
+    return jsonify({
+        "total": total_days, # becomes data.total in React with total being the key
+        "episodes": episodes_watched # becomes data.episodes in React with episodes being the key
+        }), 200
 
 @app.route('/search', methods=['GET'])
 def show_anime():

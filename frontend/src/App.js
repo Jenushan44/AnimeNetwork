@@ -16,6 +16,28 @@ function Home() {
   );
 }
 
+function ProfilePage() {
+
+  const [totalTime, setTotalTime] = useState(0)
+
+  useEffect(() => { // When profile page shows up run this (useEffect)
+    async function fetchData() {
+      const result = await fetch("http://localhost:5000/profile")  // Sends a GET request to Flask backend at /profile and retrieves all data 
+      const data = await result.json()
+      setTotalTime(data.total)
+    }
+    fetchData();
+
+  }, []);
+
+  return (
+    <div>
+      <h1>Profile Page</h1>
+      <p>Total time watched: {totalTime} minutes</p>
+    </div>
+  );
+}
+
 function List() {
   const [mediaList, setMediaList] = useState([]);
   const [editId, setEditId] = useState('');
@@ -149,6 +171,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/list" element={<List />} />
         <Route path="/details/:id" element={<DetailPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

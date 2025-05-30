@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 
 const query = `
@@ -33,7 +33,9 @@ const DetailPage = () => {
       body: JSON.stringify({
         title: valueData.title.romaji,
         genre: "N/A",
-        score: valueData.episodes
+        score: 0, // Set by user not api so initially 0
+        status: "Watching",
+        episodes: valueData.episodes || 0
       })
     });
   }
@@ -73,6 +75,7 @@ const DetailPage = () => {
           <p>Episodes: {valueData.episodes}</p>
           <p>Format: {valueData.format}</p>
           <img src={valueData.coverImage.large} alt={valueData.title.romaji} />
+          <Link to='/'>Home Page</Link>
         </div>
       )}
       <button onClick={handleAddShelf}>Add to Shelf</button>

@@ -6,4 +6,5 @@ class Anime(db.Model):
     title = db.Column(db.String(100), nullable=False, unique=True)
     genre = db.Column(db.String(100), nullable=False)
     score = db.Column(db.Integer, nullable=True)
+    episodes = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(50))

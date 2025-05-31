@@ -32,7 +32,21 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  /*Moves navbar links right */
+  gap: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

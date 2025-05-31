@@ -17,9 +17,13 @@ function NavBar() {
 
   return (
     <nav className="navbar">
-      <Link to="/">Home</Link>
-      <Link to="/list">MyList</Link>
-      <Link to="/profile">Profile</Link>
+      <div className="nav-left">
+
+        <Link to="/">Home</Link>
+        <Link to="/list">MyList</Link>
+        <Link to="/profile">Profile</Link>
+
+      </div>
 
       <form onSubmit={submitHandle} className="nav-search">
         <input

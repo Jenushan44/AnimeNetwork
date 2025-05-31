@@ -12,7 +12,7 @@ function SearchResults() {
         media(search: $search, type: ANIME) {
           id
           title {
-            romaji
+            english
           }
           episodes
           format
@@ -60,11 +60,11 @@ function SearchResults() {
             <Link to={`/details/${anime.id}`}>
               <img
                 src={anime.coverImage.large}
-                alt={anime.title.romaji}
+                alt={anime.title.english}
                 width="100"
               />
               <p>
-                {anime.title.romaji} — {anime.episodes} episodes
+                {anime.title.english} — {anime.episodes} episodes
               </p>
             </Link>
           </li>

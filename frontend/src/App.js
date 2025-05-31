@@ -112,57 +112,78 @@ function List() {
 
       </form>
 
-      {filteredList.map((media) => (
-        <div key={media.id}>
-          {editId == media.id ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleUpdate(media.id);
-              }}
-            >
-              <select value={editScore} onChange={(e) => setScoreId(e.target.value)}>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-              </select>
-              <button type="submit">Save</button>
-              <button type="button" onClick={() => {
-                setEditId("");
-                setScoreId("");
-              }}>Cancel</button>
+      <div className="media-grid">
+        {filteredList.map((media) => (
+          <div key={media.id} className="media-entry">
+            {editId == media.id ? (
+              <form
+                className="edit-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleUpdate(media.id);
+                }}
+              >
+                <select value={editScore} onChange={(e) => setScoreId(e.target.value)}>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
 
-              <select value={editStatus} onChange={(e) => setStatus(e.target.value)}>
-                <option value="Watching">Watching</option>
-                <option value="Completed">Completed</option>
-                <option value="Plan to watch">Plan to watch</option>
-                <option value="On Hold">On Hold</option>
-                <option value="Dropped">Dropped</option>
-              </select>
+                <select value={editStatus} onChange={(e) => setStatus(e.target.value)}>
+                  <option value="Watching">Watching</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Plan to watch">Plan to watch</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Dropped">Dropped</option>
+                </select>
 
-            </form>
 
-          ) : (
-            <p>
-              {media.title} - Genre: {media.genre} - Score: {media.score} - Status: {media.status}
-            </p>
-          )}
-          <button onClick={() => {
-            setEditId(media.id);
-            setScoreId(media.score.toString());
-            setStatus(media.status);
-          }}>Edit</button>
-          <button onClick={() => handleDelete(media.id)}>Delete</button>
+                <button type="submit" className="save-btn">Save</button>
+                <button type="button" className="cancel-btn" onClick={() => {
+                  setEditId("");
+                  setScoreId("");
+                }}>Cancel</button>
 
-        </div>
-      ))}
+
+
+              </form>
+
+            ) : (
+
+              <div className="media-entry">
+                <Link to={`/details/${media.anilist_id}`}>
+                  <img src={media.coverImage} alt={media.title} className="media-image" />
+                </Link>
+                <div className="media-details">
+                  <p className="media-title">
+                    <Link to={`/details/${media.anilist_id}`}><strong>{media.title}</strong></Link></p>
+                  <p><strong>Score:</strong> {media.score}</p>
+                  <p><strong>Status:</strong> {media.status}</p>
+                  <p><strong>Genre:</strong> {media.genre}</p>
+                  <button onClick={() => {
+                    setEditId(media.id);
+                    setScoreId(media.score.toString());
+                    setStatus(media.status);
+                  }}>Edit</button>
+                  <button onClick={() => handleDelete(media.id)}>Delete</button>
+                </div>
+              </div>
+
+            )}
+
+
+          </div>
+        ))}
+
+      </div>
+
     </div>
   );
 }

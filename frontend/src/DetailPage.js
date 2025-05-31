@@ -8,7 +8,7 @@ const query = `
     Media(id: $id, type: ANIME) {
       id
       title {
-        romaji 
+        english 
       }
       episodes 
       format
@@ -26,17 +26,22 @@ const DetailPage = () => {
   const { id } = useParams()
   const [valueData, setValueData] = useState(null);
   const handleAddShelf = async () => {
+
+    if (!valueData) return;
+
     const res = await fetch("http://localhost:5000/media", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        title: valueData.title.romaji,
+        title: valueData.title.english,
+        anilist_id: valueData.id,
         genre: "N/A",
         score: 0, // Set by user not api so initially 0
         status: "Watching",
-        episodes: valueData.episodes || 0
+        episodes: valueData.episodes || 0,
+        coverImage: valueData.coverImage.large
       })
     });
   }
@@ -72,10 +77,10 @@ const DetailPage = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <h1>{valueData.title.romaji}</h1>
+          <h1>{valueData.title.english}</h1>
           <p>Episodes: {valueData.episodes}</p>
           <p>Format: {valueData.format}</p>
-          <img src={valueData.coverImage.large} alt={valueData.title.romaji} />
+          <img src={valueData.coverImage.large} alt={valueData.title.english} />
           <Link to='/'>Home Page</Link>
         </div>
       )}

@@ -8,3 +8,5 @@ class Anime(db.Model):
     score = db.Column(db.Integer, nullable=True)
     episodes = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(50))
+    coverImage = db.Column(db.String(300))
+    anilist_id = db.Column(db.Integer, nullable=False)

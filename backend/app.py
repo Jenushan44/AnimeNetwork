@@ -30,7 +30,9 @@ def get_list():
             'title': item.title, 
             'genre': item.genre, 
             'score': item.score,
-            'status': item.status
+            'status': item.status,
+            'coverImage': item.coverImage,
+            'anilist_id': item.anilist_id
         })
     return jsonify(result), 200
 
@@ -43,7 +45,10 @@ def add_list():
         genre=data['genre'],
         score=data['score'],
         status=data.get("status", "Watching"),
-        episodes=data["episodes"]
+        episodes=data["episodes"],
+        coverImage=data["coverImage"],
+        anilist_id=data["anilist_id"]
+
     )
     db.session.add(new_item)
     db.session.commit()
@@ -68,7 +73,10 @@ def save_media():
         genre=data["genre"],
         score=data["score"],
         status=data.get("status", "Watching"),
-        episodes=data["episodes"]
+        episodes=data["episodes"],
+        coverImage=data["coverImage"],
+        anilist_id=data["anilist_id"],
+
 
     )
 
@@ -118,13 +126,15 @@ def show_anime():
     query = f"""
     {{
         Media(search: "{title}") {{
-        title {{ romaji }}
+        title {{ english }}
         episodes
         format 
-        coverImage {{ large }}
+        coverImage {{ large }} 
         }}
     }}
     """
+    # coverImage
+
     mydict = {"query": query}
     headers = {"Content-Type": "application/json"}
     response = requests.post(

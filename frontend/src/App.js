@@ -8,14 +8,118 @@ import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
 
 
+function getCurrentSeason() {
+  const date = new Date(); // Contains current Date object that contains current data and time
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  const season =
+    month >= 1 && month <= 3 ? "WINTER" :
+      month >= 4 && month <= 6 ? "SPRING" :
+        month >= 7 && month <= 9 ? "SUMMER" :
+          "FALL";
+
+  return { season, year };
+}
 
 function Home() {
+
+  //const [seasonal, setSeasonal] = useState([]);
+  const [popular, setPopular] = useState([]);
+  const [trending, setTrending] = useState([]); // Initialize state where list of trending anime is stored
+
+  const [bannerIndex, setBannerIndex] = useState(0);
+  const featured = trending[bannerIndex]; // the most trending anime
+
+  function Next() {
+    if (bannerIndex === trending.length - 1) {
+      setBannerIndex((bannerIndex) => 0)
+    } else {
+      setBannerIndex((bannerIndex) => bannerIndex + 1)
+    }
+
+  }
+
+  function Prev() {
+    if (bannerIndex === 0) {
+      setBannerIndex((bannerIndex) => trending.length - 1);
+    } else {
+      setBannerIndex((bannerIndex) => bannerIndex - 1)
+    }
+  }
+
+  useEffect(() => { // Trigger the fetch when the home page renders
+    fetch("https://graphql.anilist.co", { // Sends a POST request to AniList's GraphQL API
+      method: "POST",
+      headers: { "Content-Type": "application/json" }, // Tells AniList you're sending JSON data
+      body: JSON.stringify({  // contains query 
+        query: `
+      query {
+      Page(perPage: 10) {
+        media(sort: TRENDING_DESC, type: ANIME) {
+        id
+        title {
+        romaji
+        }
+        genres
+        description(asHtml: false)
+        bannerImage
+        coverImage {
+          large
+        }
+      }
+    }
+  }
+
+        `,
+      })
+    })
+      .then(res => res.json()) // Converts JSON format into Javscript object
+      .then(data => {
+        if (data?.data?.Page?.media) {
+          setTrending(data.data.Page.media);
+        } else {
+          console.error("AniList API error:", data);
+        }
+      })
+      .catch(err => console.error("Network Error:", err));
+
+  }, []);
+
+
+
   return (
-    <div className="App">
-      <h1>Welcome to Animeshelf</h1>
+    <div className="App home-container">
+      {featured && (
+        <section
+          className="hero-banner"
+          style={{
+            backgroundImage: `url(${featured.bannerImage || featured.coverImage.extraLarge})`,
+          }}
+        >
+          <div className='overlay-banner'></div> { }
+          <div className="hero-overlay">
+            <h1 className='genre-banner'>{featured.genres?.join(", ")}</h1>
+            <h2>{featured.title.romaji}</h2>
+            <p>{featured.description?.split("<br>")[0].slice(0, 200)}...</p>
+            <Link to={`/details/${featured.id}`} className="read-more-btn">
+              Read more
+            </Link>
+          </div>
+          <div className="banner-btn">
+            <button onClick={Next}>{'<'}</button>
+            <button onClick={Prev}>{'>'}</button>
+          </div>
+        </section>
+      )}
+
+
+
     </div>
   );
 }
+
+
 
 function ProfilePage() {
 
@@ -166,7 +270,7 @@ function List() {
                     <Link to={`/details/${media.anilist_id}`}><strong>{media.title}</strong></Link></p>
                   <p><strong>Score:</strong> {media.score}</p>
                   <p><strong>Status:</strong> {media.status}</p>
-                  <p><strong>Genre:</strong> {media.genre}</p>
+                  <p><strong>Genre:</strong> {media.genres}</p>
                   <button onClick={() => {
                     setEditId(media.id);
                     setScoreId(media.score.toString());
@@ -187,6 +291,10 @@ function List() {
     </div>
   );
 }
+
+
+
+
 
 function App() {
   return (

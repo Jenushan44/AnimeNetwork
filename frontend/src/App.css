@@ -6,134 +6,6 @@ body {
   padding: 0;
 }
 
-.media-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 2rem;
-  justify-items: center;
-}
-
-.media-entry {
-  background-color: #1e1e1e;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  width: 260px;
-  transition: transform 0.2s ease;
-}
-
-.media-entry:hover {
-  transform: scale(1.03);
-}
-
-.media-image {
-  width: 100%;
-  height: 360px;
-  object-fit: cover;
-}
-
-.media-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  gap: 0.2rem;
-  padding: 0.4rem 0;
-  margin-left: 10px;
-}
-
-.media-details p {
-  margin: 0.4rem 0;
-  line-height: 2;
-}
-
-.media-details button {
-  width: 90%;
-  margin: 4px auto;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  color: white;
-  background-color: #333333;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.media-details button:first-of-type {
-  background-color: #444444;
-}
-
-.media-details button:first-of-type:hover {
-  background-color: #666666;
-}
-
-.media-details button:last-of-type {
-  background-color: #7a0000;
-}
-
-.media-details button:last-of-type:hover {
-  background-color: #a30000;
-}
-
-.media-details button:focus {
-  outline: 2px solid #FFD700;
-  outline-offset: 2px;
-}
-
-
-.media-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0.4rem;
-  color: #f5c518;
-  text-decoration: none;
-}
-
-.media-title a {
-  color: #f5c518;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.media-title a:visited {
-  color: #f5c518;
-}
-
-.media-title a:hover {
-  text-decoration: none;
-}
-
-
-
-.edit-button,
-.delete-button {
-  padding: 0.4rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 0.4rem;
-}
-
-.edit-button {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.delete-button {
-  background-color: #ef4444;
-  color: white;
-}
-
-select {
-  margin-right: 1rem;
-  padding: 0.3rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -151,6 +23,7 @@ select {
   text-decoration: none;
   color: #facc15;
   /* yellow highlight */
+
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -180,42 +53,152 @@ select {
   background-color: #eab308;
 }
 
-.media-entry-link {
-  text-decoration: none;
-  color: inherit;
+
+.trending-section {
+  padding: 40px 0;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.edit-form {
+
+.slider {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  padding-bottom: 12px;
+  padding-left: 10px;
+  scrollbar-width: none;
+
 }
 
-.save-btn,
-.cancel-btn {
-  padding: 6px 12px;
+.slider::-webkit-scrollbar {
+  display: none;
+
+}
+
+.card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  width: 300px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(88, 88, 88, 0.5);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.card p {
+  color: #ffc107;
   font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-family: inherit;
+  font-size: 16px;
+  margin: 12px 0;
 }
 
-.save-btn {
-  background-color: #FFD700;
-  color: black;
+.hero-banner {
+  background-size: cover;
+  background-position: center;
+  height: 500px;
+  position: relative;
+  border-radius: 12px;
+  margin: 20px auto;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
-.cancel-btn {
-  background-color: #444;
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  max-width: 600px;
+  width: 100%;
+  padding: 40px;
   color: white;
 }
 
-.save-btn:hover {
-  background-color: #e6c200;
+.overlay-banner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(29, 29, 29, 0.8), transparent);
+  z-index: 1;
+  pointer-events: none;
+  /* Makes overlay ignore mouse events in order to click buttons */
 }
 
-.cancel-btn:hover {
-  background-color: #666;
+
+.hero-overlay h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.hero-overlay p {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.read-more-btn {
+  display: inline-block;
+  margin-top: 12px;
+  background-color: #ff9800;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.banner-btn {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.banner-btn button {
+  background-color: #ff9800;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.banner-btn button:hover {
+  background-color: #e38e00;
+}
+
+
+
+
+
+@media (max-width: 768px) {
+  .hero-banner {
+    height: 300px;
+  }
+
+  .hero-overlay h2 {
+    font-size: 22px;
+  }
+
+  .hero-overlay p {
+    font-size: 14px;
+  }
 }

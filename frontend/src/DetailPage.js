@@ -19,9 +19,6 @@ const query = `
   }
 `;
 
-
-
-
 const DetailPage = () => {
   const { id } = useParams()
   const [valueData, setValueData] = useState(null);
@@ -38,7 +35,7 @@ const DetailPage = () => {
         title: valueData.title.english,
         anilist_id: valueData.id,
         genre: "N/A",
-        score: 0, // Set by user not api so initially 0
+        score: 0, // Set by the user and not the api so initially 0
         status: "Watching",
         episodes: valueData.episodes || 0,
         coverImage: valueData.coverImage.large

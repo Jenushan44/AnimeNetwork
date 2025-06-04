@@ -187,19 +187,26 @@ body {
 
 .airing-grid {
   display: flex;
-  /* arrange show images in rows */
   overflow-x: auto;
   scroll-behavior: smooth;
   gap: 50px;
   padding: 1rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   scrollbar-width: none;
-  margin-left: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
+
 }
+
 
 .airing-card {
+  flex: 0 0 auto;
   width: 200px;
-
+  scroll-snap-align: start;
 }
+
 
 
 .anime-title {
@@ -223,6 +230,8 @@ body {
   background: none;
   border: none;
   color: white;
+  left: 0;
+  transform: translateY(10%) translateX(28px);
 }
 
 .airing-title:hover {
@@ -231,11 +240,49 @@ body {
 
 }
 
+.spring-title,
+.winter-title,
+.summer-title,
+.next-season-title {
+  font-size: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  transition: 0.6s;
+  left: 0;
+  transform: translateY(10%) translateX(28px);
+}
+
+.spring-title:hover,
+.winter-title:hover,
+.summer-title:hover,
+.next-season-title:hover {
+  color: #eab308;
+  border-bottom: 2px solid #eab308;
+  transition: 0.9s;
+
+}
+
+.season-headings {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+}
+
+.vertical-divider {
+  color: #ff9800;
+  font-size: 1.2rem;
+  left: 0;
+  transform: translateY(10%) translateX(28px);
+}
+
 .airing-wrap {
   position: relative;
   display: flex;
   align-items: center;
-  width: 760px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .scroll-left,
@@ -253,7 +300,7 @@ body {
   padding: 0.4rem 0.8rem;
   cursor: pointer;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  transition: background-color 1s ease;
 }
 
 .scroll-left:hover,
@@ -262,44 +309,37 @@ body {
   background-color: #e38e00;
 }
 
+.scroll-right {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%) translateX(-25px);
+}
 
 .scroll-left {
-  margin-left: 8px;
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%) translateX(25px);
 }
 
+.scroll-left,
 .scroll-right {
-  margin-left: 740px;
+  position: absolute;
 }
 
-.spring-title,
-.winter-title,
-.summer-title {
-  font-size: 1rem;
-  background: none;
-  border: none;
-  color: white;
-}
 
-.spring-title:hover,
-.winter-title:hover,
-.summer-title:hover {
-  color: #eab308;
-  border-bottom: 2px solid #eab308;
-}
 
-.season-headings {
+.season-layout {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 1rem;
   gap: 1rem;
-  font-size: 1.2rem;
+  width: 100%;
+
 }
 
-.vertical-divider {
-  /*color: #aaa;*/
-  color: #ff9800;
-  font-size: 1.2rem;
-  margin: 0 0.5rem;
-}
+
+
 
 @media (max-width: 768px) {
   .hero-banner {

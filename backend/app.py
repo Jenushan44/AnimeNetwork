@@ -48,6 +48,20 @@ def get_season_year(season):
     else:
         return year
 
+def get_next_season():
+    month = datetime.now().month
+    year = datetime.now().year
+
+    if 1 <= month <= 3:
+        return "SPRING", year
+    elif 4 <= month <= 6:
+        return "SUMMER", year
+    elif 7 <= month <= 9:
+        return "FALL", year
+    elif 10 <= month <= 12:
+        return "WINTER", year + 1
+
+
 
 
 @app.route('/')
@@ -98,30 +112,6 @@ def delete_list(show_id):
     db.session.commit() # commit changes to database 
     return jsonify({'message': 'Anime deleted'}), 200
 
-@app.route('/media', methods=['POST'])
-def save_media():
-    data = request.get_json()
-    print("Success", data)
-
-    new_item = Anime(
-        title=data["title"],
-        genre=data["genre"],
-        score=data["score"],
-        status=data.get("status", "Watching"),
-        episodes=data["episodes"],
-        coverImage=data["coverImage"],
-        anilist_id=data["anilist_id"],
-
-
-    )
-
-    try:         
-        db.session.add(new_item)
-        db.session.commit()
-        return jsonify({'message': 'saved'}), 201
-    except IntegrityError: #Error when breaking database rules
-        db.session.rollback() # Changes back to state before adding show
-        return jsonify({'message': 'Anime already in list'}), 400 
 
 
 @app.route('/list/<int:show_id>', methods=['PUT'])
@@ -153,34 +143,6 @@ def view_profile():
         "episodes": episodes_watched # becomes data.episodes in React with episodes being the key
         }), 200
 
-@app.route('/search', methods=['GET'])
-def show_anime():
-    title = request.args.get('title')
-    
-    
-    query = f"""
-    {{
-        Media(search: "{title}") {{
-        title {{ english }}
-        episodes
-        format 
-        coverImage {{ large }} 
-        }}
-    }}
-    """
-    # coverImage
-
-    mydict = {"query": query}
-    headers = {"Content-Type": "application/json"}
-    response = requests.post(
-        "https://graphql.anilist.co",
-        json=mydict,
-        headers=headers
-    )
-
-    data = response.json()
-    return jsonify(data), 200
- 
 @app.route('/anilist/trending', methods=['GET'])
 def get_trending():
     query = '''
@@ -228,6 +190,7 @@ def get_airing():
     headers = {"Content-Type": "application/json"}
     response = requests.post("https://graphql.anilist.co", json={"query": query}, headers=headers)
     return jsonify(response.json())
+
 @app.route('/anilist/season', methods=['GET'])
 def fetch_season():
     season = request.args.get('season', '').upper()
@@ -260,6 +223,44 @@ def fetch_season():
     )
     return jsonify(response.json()), 200
 
+@app.route('/anilist/nextseason', methods=['GET'])
+def fetch_next_season():
+    season, year = get_next_season()
+
+    query = '''
+    query ($season: MediaSeason, $seasonYear: Int) {
+      Page(perPage: 20) {
+        media(season: $season, seasonYear: $seasonYear, type: ANIME, format: TV) {
+          id
+          title {
+            romaji
+            english
+          }
+          description(asHtml: false)
+
+        coverImage {
+            large
+          }
+          genres
+        }
+      }
+    }
+    '''
+
+    variables = {
+        "season": season,
+        "seasonYear": year
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(
+        "https://graphql.anilist.co",
+        json={"query": query, "variables": variables},
+        headers=headers
+    )
+
+    return jsonify(response.json()), 200
 
 if __name__ == '__main__':
     with app.app_context():

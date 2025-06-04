@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import SearchResults from "./SearchResults";
-
 
 const query = `
   query ($id: Int) {
@@ -26,7 +24,7 @@ const DetailPage = () => {
 
     if (!valueData) return;
 
-    const res = await fetch("http://localhost:5000/media", {
+    const res = await fetch("http://localhost:5000/list", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -76,7 +76,10 @@ function Home() {
 
     if (category === "airing") {
       url = "http://localhost:5000/anilist/airing";
-    } else {
+    } else if (category === "next-season") {
+      url = "http://localhost:5000/anilist/nextseason";
+    }
+    else {
       url = `http://localhost:5000/anilist/season?season=${category}`;
     }
 
@@ -91,6 +94,7 @@ function Home() {
       })
       .catch((err) => console.error("Network Error:", err));
   }, [category]);
+
 
 
   return (
@@ -127,33 +131,34 @@ function Home() {
           <button onClick={() => setCategory("summer")} className="summer-title"> Summer </button>
           <div className="vertical-divider">|</div>
           <button onClick={() => setCategory("winter")} className="winter-title"> Winter </button>
+          <div className="vertical-divider">|</div>
+          <button onClick={() => setCategory("next-season")} className="next-season-title"> Next Season </button>
         </div>
 
-        <div className='airing-wrap'>
-          <button className='scroll-left' onClick={scrollLeft}>{'<'}</button>
-          <div className='airing-grid' ref={gridRef}>
-            {animeList.map((anime) => (
-              <div className="airing-card" key={anime.id}>
-                <Link to={`/details/${anime.id}`}>
-                  <img src={anime.coverImage.large} alt={anime.title.english} />
-                  <p className="anime-genre">{anime.genres?.slice(0, 3).join(", ")}</p>
-                  <p className="anime-title">
-                    {anime.title.english?.length > 22
-                      ? anime.title.english.slice(0, 22) + "..."
-                      : anime.title.english}
-                  </p>
-                </Link>
-              </div>
-            ))}
+        <div className='season-layout'>
+          <div className='airing-wrap'>
+            <button className='scroll-left' onClick={scrollLeft}>{'<'}</button>
+            <div className='airing-grid' ref={gridRef}>
+              {animeList.map((anime) => (
+                <div className="airing-card" key={anime.id}>
+                  <Link to={`/details/${anime.id}`}>
+                    <img src={anime.coverImage.large} alt={anime.title.english} />
+                    <p className="anime-genre">{anime.genres?.slice(0, 3).join(", ")}</p>
+                    <p className="anime-title">
+                      {anime.title.english?.length > 22
+                        ? anime.title.english.slice(0, 22) + "..."
+                        : anime.title.english}
+                    </p>
+                  </Link>
+                </div>
+              ))}
+            </div>
+            <button className="scroll-right" onClick={scrollRight}>{'>'}</button>
+
+
           </div>
-          <button className="scroll-right" onClick={scrollRight}>{'>'}</button>
-
         </div>
-
-
       </section >
-
-
     </div >
   )
 };

@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 import { useState } from 'react'
-import SearchResults from "./SearchResults";
 
 
 function NavBar() {

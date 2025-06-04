@@ -188,16 +188,17 @@ body {
 .airing-grid {
   display: flex;
   /* arrange show images in rows */
-  flex-wrap: wrap;
-  /* if row gets full, start a new row */
+  overflow-x: auto;
+  scroll-behavior: smooth;
   gap: 50px;
-  /*space between shows*/
-  justify-content: center;
-  /*aligns entire row of items in center of container*/
+  padding: 1rem;
+  scrollbar-width: none;
+  margin-left: 20px;
 }
 
 .airing-card {
   width: 200px;
+
 }
 
 
@@ -218,15 +219,73 @@ body {
 
 .airing-title {
   font-size: 1rem;
-  margin-left: 115px;
+  margin-left: 30px;
+  background: none;
+  border: none;
+  color: white;
+}
+
+.airing-title:hover {
+  color: #eab308;
+  border-bottom: 2px solid #eab308;
+
+}
+
+.airing-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 760px;
+}
+
+.scroll-left,
+.scroll-right,
+.scroll-btn {
+  position: absolute;
+  z-index: 2;
+  top: 40%;
+  transform: translateY(-50%);
+  background-color: #ff9800;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.scroll-left:hover,
+.scroll-right:hover,
+.scroll-btn:hover {
+  background-color: #e38e00;
+}
+
+
+.scroll-left {
+  margin-left: 8px;
+}
+
+.scroll-right {
+  margin-left: 740px;
 }
 
 .spring-title,
 .winter-title,
 .summer-title {
   font-size: 1rem;
+  background: none;
+  border: none;
+  color: white;
 }
 
+.spring-title:hover,
+.winter-title:hover,
+.summer-title:hover {
+  color: #eab308;
+  border-bottom: 2px solid #eab308;
+}
 
 .season-headings {
   display: flex;

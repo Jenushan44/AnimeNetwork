@@ -3,7 +3,7 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import DetailPage from './DetailPage.js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
 
@@ -31,7 +31,15 @@ function Home() {
   const [bannerIndex, setBannerIndex] = useState(0);
   const featured = trending[bannerIndex]; // the most trending anime
   const [category, setCategory] = useState("airing");
+  const gridRef = useRef(null);
 
+  const scrollLeft = () => {
+    gridRef.current.scrollBy({ left: -500, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    gridRef.current.scrollBy({ left: 500, behavior: "smooth" });
+  };
   function Next() {
     if (bannerIndex === trending.length - 1) {
       setBannerIndex((bannerIndex) => 0)
@@ -112,7 +120,7 @@ function Home() {
 
       <section className="season-section">
         <div className="season-headings">
-          <button onClick={() => setCategory("airing")} className="airing-title"> Airing </button>
+          <button onClick={() => setCategory("airing")} className="airing-title"> Airing Now </button>
           <div className="vertical-divider">|</div>
           <button onClick={() => setCategory("spring")} className="spring-title"> Spring </button>
           <div className="vertical-divider">|</div>
@@ -120,20 +128,26 @@ function Home() {
           <div className="vertical-divider">|</div>
           <button onClick={() => setCategory("winter")} className="winter-title"> Winter </button>
         </div>
-        <div className='airing-grid'>
-          {animeList.map((anime) => (
-            <div className="airing-card" key={anime.id}>
-              <Link to={`/details/${anime.id}`}>
-                <img src={anime.coverImage.large} alt={anime.title.english} />
-                <p className="anime-genre">{anime.genres?.slice(0, 3).join(", ")}</p>
-                <p className="anime-title">
-                  {anime.title.english?.length > 22
-                    ? anime.title.english.slice(0, 22) + "..."
-                    : anime.title.english}
-                </p>
-              </Link>
-            </div>
-          ))}
+
+        <div className='airing-wrap'>
+          <button className='scroll-left' onClick={scrollLeft}>{'<'}</button>
+          <div className='airing-grid' ref={gridRef}>
+            {animeList.map((anime) => (
+              <div className="airing-card" key={anime.id}>
+                <Link to={`/details/${anime.id}`}>
+                  <img src={anime.coverImage.large} alt={anime.title.english} />
+                  <p className="anime-genre">{anime.genres?.slice(0, 3).join(", ")}</p>
+                  <p className="anime-title">
+                    {anime.title.english?.length > 22
+                      ? anime.title.english.slice(0, 22) + "..."
+                      : anime.title.english}
+                  </p>
+                </Link>
+              </div>
+            ))}
+          </div>
+          <button className="scroll-right" onClick={scrollRight}>{'>'}</button>
+
         </div>
 
 

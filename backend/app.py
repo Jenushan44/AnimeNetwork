@@ -210,7 +210,7 @@ def get_trending():
 def get_airing():
     query = '''
     query {
-  Page(perPage: 5) {
+  Page(perPage: 13) {
     media(sort: [EPISODES_DESC], type: ANIME, status: RELEASING, format: TV) {
           id
           title {
@@ -235,7 +235,7 @@ def fetch_season():
 
     query = '''
     query ($season: MediaSeason, $year: Int) {
-      Page(perPage: 5) {
+      Page(perPage: 13) {
         media(season: $season, seasonYear: $year, type: ANIME, format: TV) {
           id
           title {

@@ -185,9 +185,62 @@ body {
   background-color: #e38e00;
 }
 
+.airing-grid {
+  display: flex;
+  /* arrange show images in rows */
+  flex-wrap: wrap;
+  /* if row gets full, start a new row */
+  gap: 50px;
+  /*space between shows*/
+  justify-content: center;
+  /*aligns entire row of items in center of container*/
+}
+
+.airing-card {
+  width: 200px;
+}
 
 
+.anime-title {
+  font-weight: bold;
+  color: white;
+  font-size: 1rem;
+}
 
+.airing-card a {
+  text-decoration: none;
+}
+
+.anime-genre {
+  color: #a8a8a8;
+  font-size: 0.8rem;
+}
+
+.airing-title {
+  font-size: 1rem;
+  margin-left: 115px;
+}
+
+.spring-title,
+.winter-title,
+.summer-title {
+  font-size: 1rem;
+}
+
+
+.season-headings {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+}
+
+.vertical-divider {
+  /*color: #aaa;*/
+  color: #ff9800;
+  font-size: 1.2rem;
+  margin: 0 0.5rem;
+}
 
 @media (max-width: 768px) {
   .hero-banner {

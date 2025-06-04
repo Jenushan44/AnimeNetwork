@@ -5,6 +5,8 @@ from flask_cors import CORS
 from models import Anime 
 from extensions import db
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
+
 
 import requests
 
@@ -14,6 +16,39 @@ CORS(app, origins=["http://localhost:3000"])
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///animes.db'
 
 db.init_app(app) 
+
+def get_season_year(season): 
+    month = datetime.now().month
+    year = datetime.now().year 
+    season = season.upper()
+
+    if season == "WINTER": 
+        if month < 1: 
+            return year - 1
+        else: 
+            return year 
+    
+    elif season == "SPRING": 
+        if month < 4: 
+            return year - 1
+        else: 
+            return year 
+    
+    elif season == "SUMMER": 
+        if month < 7: 
+            return year -1 
+        else: 
+            return year
+    
+    elif season == "FALL": 
+        if month < 10: 
+            return year - 1 
+        else: 
+            return year
+    else:
+        return year
+
+
 
 @app.route('/')
 def home():
@@ -146,6 +181,85 @@ def show_anime():
     data = response.json()
     return jsonify(data), 200
  
+@app.route('/anilist/trending', methods=['GET'])
+def get_trending():
+    query = '''
+    query {
+      Page(perPage: 10) {
+        media(sort: TRENDING_DESC, type: ANIME) {
+          id
+          title {
+            romaji
+          }
+          genres
+          description(asHtml: false)
+          bannerImage
+          coverImage {
+            large
+            extraLarge
+          }
+        }
+      }
+    }
+    '''
+    headers = {"Content-Type": "application/json"}
+    response = requests.post("https://graphql.anilist.co", json={"query": query}, headers=headers)
+    return jsonify(response.json())
+
+@app.route('/anilist/airing', methods=['GET'])
+def get_airing():
+    query = '''
+    query {
+  Page(perPage: 5) {
+    media(sort: [EPISODES_DESC], type: ANIME, status: RELEASING, format: TV) {
+          id
+          title {
+            english
+          }
+          genres
+          coverImage {
+            large
+            medium
+          }
+        }
+      }
+    }
+    '''
+    headers = {"Content-Type": "application/json"}
+    response = requests.post("https://graphql.anilist.co", json={"query": query}, headers=headers)
+    return jsonify(response.json())
+@app.route('/anilist/season', methods=['GET'])
+def fetch_season():
+    season = request.args.get('season', '').upper()
+    year = get_season_year(season)
+
+    query = '''
+    query ($season: MediaSeason, $year: Int) {
+      Page(perPage: 5) {
+        media(season: $season, seasonYear: $year, type: ANIME, format: TV) {
+          id
+          title {
+            english
+          }
+          coverImage {
+            large
+          }
+          genres
+        }
+      }
+    }
+    '''
+
+    variables = {"season": season, "year": year}
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(
+        "https://graphql.anilist.co",
+        json={"query": query, "variables": variables},
+        headers=headers
+    )
+    return jsonify(response.json()), 200
+
 
 if __name__ == '__main__':
     with app.app_context():

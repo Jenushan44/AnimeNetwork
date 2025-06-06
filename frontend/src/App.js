@@ -251,26 +251,31 @@ function List() {
     }
     else if (sortBy == 'Title (Z-A)') {
       sortedList.sort((a, b) => b.title.localeCompare(a.title));
-    } else if (sortBy == 'score') {
+    } else if (sortBy == 'Score (Descending)') {
       sortedList.sort((a, b) => {
         const scoreA = a.score === "-" ? 0 : a.score;
         const scoreB = b.score === "-" ? 0 : b.score;
         return scoreB - scoreA;
       });
+    } else if (sortBy == 'Score (Ascending)') {
+      sortedList.sort((a, b) => {
+        const scoreA = a.score === "-" ? 0 : a.score;
+        const scoreB = b.score === "-" ? 0 : b.score;
+        return scoreA - scoreB;
+      })
+    } else if (sortBy == 'Oldest Added') {
+      sortedList.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    } else if (sortBy == 'Newest Added') {
+      sortedList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
-
     return sortedList
   }
 
   return (
     <div>
-
-
       <h1 className='list-title'>My List</h1>
-
-
-
       <div className='list-buttons'>
+
         <button onClick={() => editFilterStatus("All")} className='all-button'> All </button>
         <button onClick={() => editFilterStatus("Watching")} className='watching-button'> Watching </button>
         <button onClick={() => editFilterStatus("Completed")} className='completed-button'> Completed </button>
@@ -279,11 +284,19 @@ function List() {
         <button onClick={() => editFilterStatus("Dropped")} className='dropped-button'> Dropped </button>
       </div>
 
-      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-        <option value="Title (A-Z)">Title (A-Z)</option>
-        <option value="Title (Z-A)">Title (Z-A)</option>
-        <option value="score">Score</option>
-      </select>
+      <div className='filter-option'>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className='list-filter'>
+          <option value="Title (A-Z)">Title (A-Z)</option>
+          <option value="Title (Z-A)">Title (Z-A)</option>
+          <option value="Score (Ascending)">Score (Ascending)</option>
+          <option value="Score (Descending)">Score (Descending)</option>
+          <option value="Oldest Added">Oldest Added</option>
+          <option value="Newest Added">Newest Added</option>
+
+        </select>
+
+      </div>
+
 
       <div className="media-grid">
 
@@ -318,19 +331,13 @@ function List() {
                   <option value="Dropped">Dropped</option>
                 </select>
 
-
                 <button type="submit" className="save-btn">Save</button>
                 <button type="button" className="cancel-btn" onClick={() => {
                   setEditId("");
                   setScoreId("");
                 }}>Cancel</button>
-
-
-
               </form>
-
             ) : (
-
               <div className="media-entry">
                 <Link to={`/details/${media.anilist_id}`}>
                   <img src={media.coverImage} alt={media.title} className="media-image" />
@@ -359,22 +366,13 @@ function List() {
                   <button className="delete-list-button" onClick={() => handleDelete(media.id)}>Delete</button>
                 </div>
               </div>
-
             )}
-
-
           </div>
         ))}
-
       </div>
-
     </div>
   );
 }
-
-
-
-
 
 function App() {
   return (

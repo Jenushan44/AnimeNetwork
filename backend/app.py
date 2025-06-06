@@ -82,7 +82,8 @@ def get_list():
             'status': item.status,
             'coverImage': item.coverImage,
             'anilist_id': item.anilist_id,
-            'format': item.format            
+            'format': item.format,
+            "created_at": item.created_at.isoformat()        
         })
     return jsonify(result), 200
 

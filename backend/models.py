@@ -1,5 +1,7 @@
 #from app import db
 from extensions import db
+from datetime import datetime
+
 
 class Anime(db.Model): 
     id = db.Column(db.Integer, primary_key = True)
@@ -11,3 +13,4 @@ class Anime(db.Model):
     coverImage = db.Column(db.String(300))
     anilist_id = db.Column(db.Integer, nullable=False)
     format = db.Column(db.String)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

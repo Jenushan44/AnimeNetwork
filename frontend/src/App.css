@@ -292,6 +292,58 @@ body {
 
 }
 
+.search-filter {
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+}
+
+.search-res {
+  display: flex;
+  justify-content: center;
+
+}
+
+.search-all,
+.search-tv,
+.search-movie,
+.search-ona,
+.search-special {
+  font-size: 1rem;
+  background: none;
+  border: none;
+  color: white;
+  transition: 0.6s;
+  left: 0;
+  transform: translateY(10%) translateX(28px);
+  cursor: pointer;
+}
+
+.active-filter {
+  border-bottom: 2px solid #facc15;
+  color: #facc15;
+}
+
+.anime-entry {
+  transition: transform 1s ease, opacity 0.3s ease;
+}
+
+.search-title {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+
+
+.search-all:hover,
+.search-tv:hover,
+.search-movie:hover,
+.search-ona:hover,
+.search-special:hover {
+  color: #eab308;
+  border-bottom: 2px solid #eab308;
+  transition: 0.9s;
+}
+
 .list-buttons,
 .filter-option {
   display: flex;

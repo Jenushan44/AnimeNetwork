@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { handleAddShelf } from "./utils/api";
+
 
 const query = `
   query ($id: Int) {
@@ -21,27 +23,6 @@ const query = `
 const DetailPage = () => {
   const { id } = useParams()
   const [valueData, setValueData] = useState(null);
-  const handleAddShelf = async () => {
-
-    if (!valueData) return;
-
-    const res = await fetch("http://localhost:5000/list", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        title: valueData.title.english,
-        anilist_id: valueData.id,
-        genre: "N/A",
-        score: "-", // Set by the user and not the api so initially 0
-        status: "-",
-        episodes: valueData.episodes || 0,
-        coverImage: valueData.coverImage.large,
-        format: valueData.format
-      })
-    });
-  }
 
   useEffect(() => {
     const fetchAnime = async () => {
@@ -81,7 +62,7 @@ const DetailPage = () => {
           <Link to='/'>Home Page</Link>
         </div>
       )}
-      <button onClick={handleAddShelf}>Add to Shelf</button>
+      <button onClick={() => handleAddShelf(valueData)}>Add to Shelf</button>
     </div>
   );
 }

@@ -149,6 +149,20 @@ body {
   color: #ccc;
 }
 
+.add-list-btn {
+  display: inline-block;
+  margin-top: -10px;
+  background-color: #facc15;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  width: 120px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
 .read-more-btn {
   display: inline-block;
   margin-top: 12px;
@@ -158,6 +172,10 @@ body {
   color: white;
   font-weight: bold;
   text-decoration: none;
+}
+
+.add-list-btn:hover {
+  background-color: #eab308;
 }
 
 .banner-btn {
@@ -571,6 +589,59 @@ body {
   outline: none;
   border-color: #eab308;
   box-shadow: 0 0 5px rgba(250, 204, 21, 0.5);
+}
+
+.anime-entry {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #1f1f1f;
+  margin-bottom: 20px;
+  width: 1000px;
+  margin: 0 auto;
+  margin-top: 10px;
+  /*Centers each entry*/
+}
+
+.search-image {
+  width: 120px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.search-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: white;
+  margin-top: -23px;
+}
+
+.search-title {
+  margin-top: 20px;
+}
+
+.search-episode,
+.search-format {
+  margin-top: 0px;
+  display: flex;
+}
+
+.search-info-row {
+  display: flex;
+  gap: 10px;
+}
+
+
+.search-score-rank {
+  margin-top: -30px;
+}
+
+.search-rank {
+  margin-top: -10px;
 }
 
 

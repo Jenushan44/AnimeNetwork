@@ -24,7 +24,6 @@ function getCurrentSeason() {
 
 function Home() {
 
-  //const [seasonal, setSeasonal] = useState([]);
   const [popular, setPopular] = useState([]);
   const [trending, setTrending] = useState([]); // Initialize state where list of trending anime is stored
   const [animeList, setAnimeList] = useState([]);
@@ -322,14 +321,15 @@ function List() {
                   <option value="9">9</option>
                   <option value="10">10</option>
                 </select>
-
-                <select value={editStatus} onChange={(e) => setStatus(e.target.value)}>
-                  <option value="Watching">Watching</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Plan to watch">Plan to watch</option>
-                  <option value="On Hold">On Hold</option>
-                  <option value="Dropped">Dropped</option>
-                </select>
+                <div className='list-status'>
+                  <select value={editStatus} onChange={(e) => setStatus(e.target.value)}>
+                    <option value="Watching">Watching</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Plan to watch">Plan to watch</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Dropped">Dropped</option>
+                  </select>
+                </div>
 
                 <button type="submit" className="save-btn">Save</button>
                 <button type="button" className="cancel-btn" onClick={() => {

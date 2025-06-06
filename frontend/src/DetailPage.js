@@ -13,6 +13,7 @@ const query = `
       coverImage {
         large
       }
+      format
     }
   }
 `;
@@ -33,10 +34,11 @@ const DetailPage = () => {
         title: valueData.title.english,
         anilist_id: valueData.id,
         genre: "N/A",
-        score: 0, // Set by the user and not the api so initially 0
-        status: "Watching",
+        score: "-", // Set by the user and not the api so initially 0
+        status: "-",
         episodes: valueData.episodes || 0,
-        coverImage: valueData.coverImage.large
+        coverImage: valueData.coverImage.large,
+        format: valueData.format
       })
     });
   }

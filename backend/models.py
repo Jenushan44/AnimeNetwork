@@ -10,3 +10,4 @@ class Anime(db.Model):
     status = db.Column(db.String(50))
     coverImage = db.Column(db.String(300))
     anilist_id = db.Column(db.Integer, nullable=False)
+    format = db.Column(db.String)

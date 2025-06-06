@@ -81,7 +81,8 @@ def get_list():
             'score': item.score,
             'status': item.status,
             'coverImage': item.coverImage,
-            'anilist_id': item.anilist_id
+            'anilist_id': item.anilist_id,
+            'format': item.format            
         })
     return jsonify(result), 200
 
@@ -96,7 +97,8 @@ def add_list():
         status=data.get("status", "Watching"),
         episodes=data["episodes"],
         coverImage=data["coverImage"],
-        anilist_id=data["anilist_id"]
+        anilist_id=data["anilist_id"],
+        format=data.get("format", "TV")
 
     )
     db.session.add(new_item)
@@ -160,6 +162,7 @@ def get_trending():
             large
             extraLarge
           }
+          format
         }
       }
     }
@@ -183,6 +186,7 @@ def get_airing():
             large
             medium
           }
+          format
         }
       }
     }
@@ -208,6 +212,7 @@ def fetch_season():
             large
           }
           genres
+          format
         }
       }
     }
@@ -242,6 +247,7 @@ def fetch_next_season():
             large
           }
           genres
+          format
         }
       }
     }

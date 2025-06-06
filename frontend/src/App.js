@@ -31,6 +31,7 @@ function Home() {
   const [bannerIndex, setBannerIndex] = useState(0);
   const featured = trending[bannerIndex]; // the most trending anime
   const [category, setCategory] = useState("airing");
+  const [currentList, setCurrentList] = useState("all");
   const gridRef = useRef(null);
 
   const scrollLeft = () => {
@@ -94,8 +95,6 @@ function Home() {
       })
       .catch((err) => console.error("Network Error:", err));
   }, [category]);
-
-
 
   return (
     <div className="App home-container">
@@ -194,6 +193,8 @@ function List() {
   const [editScore, setScoreId] = useState('');
   const [editStatus, setStatus] = useState('');
   const [filterStatus, editFilterStatus] = useState("All")
+  const [sortBy, setSortBy] = useState("") // stores selected filter
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -235,31 +236,58 @@ function List() {
     ? mediaList // if true condition to check if filterStatus is All
     : mediaList.filter((media) => media.status === filterStatus); // else condition to filter for other states
 
+  function getStatusClass(status) {
+    if (!status) return "";
+    return "status-" + status.toLowerCase().replaceAll(" ", "-");
+  }
 
+  const sortedList = getSortedList(filteredList, sortBy);
+
+  function getSortedList(filteredList, sortBy) {
+    let sortedList = [...filteredList]; // Creates a copy of the original list
+
+    if (sortBy == 'Title (A-Z)') {
+      sortedList.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    else if (sortBy == 'Title (Z-A)') {
+      sortedList.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (sortBy == 'score') {
+      sortedList.sort((a, b) => {
+        const scoreA = a.score === "-" ? 0 : a.score;
+        const scoreB = b.score === "-" ? 0 : b.score;
+        return scoreB - scoreA;
+      });
+    }
+
+    return sortedList
+  }
 
   return (
     <div>
 
-      <h1>Show List</h1>
-      <form>
-        <select value={filterStatus} onChange={(e) => editFilterStatus(e.target.value)}>
-          <option value="All">All</option>
-          <option value="Completed">Completed</option>
-          <option value="Watching">Watching</option>
-          <option value="On Hold">On Hold</option>
-          <option value="Plan to watch">Plan to watch</option>
-          <option value="Dropped">Dropped</option>
-        </select>
 
-        <select>
-          <option value="Title">Title</option>
-          <option value="Score">Score</option>
-        </select>
+      <h1 className='list-title'>My List</h1>
 
-      </form>
+
+
+      <div className='list-buttons'>
+        <button onClick={() => editFilterStatus("All")} className='all-button'> All </button>
+        <button onClick={() => editFilterStatus("Watching")} className='watching-button'> Watching </button>
+        <button onClick={() => editFilterStatus("Completed")} className='completed-button'> Completed </button>
+        <button onClick={() => editFilterStatus("On Hold")} className='on-hold-button'> On Hold </button>
+        <button onClick={() => editFilterStatus("Plan to watch")} className='plan-to-watch-button'> Plan To Watch </button>
+        <button onClick={() => editFilterStatus("Dropped")} className='dropped-button'> Dropped </button>
+      </div>
+
+      <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <option value="Title (A-Z)">Title (A-Z)</option>
+        <option value="Title (Z-A)">Title (Z-A)</option>
+        <option value="score">Score</option>
+      </select>
 
       <div className="media-grid">
-        {filteredList.map((media) => (
+
+        {sortedList.map((media) => (
           <div key={media.id} className="media-entry">
             {editId == media.id ? (
               <form
@@ -308,17 +336,27 @@ function List() {
                   <img src={media.coverImage} alt={media.title} className="media-image" />
                 </Link>
                 <div className="media-details">
-                  <p className="media-title">
-                    <Link to={`/details/${media.anilist_id}`}><strong>{media.title}</strong></Link></p>
-                  <p><strong>Score:</strong> {media.score}</p>
-                  <p><strong>Status:</strong> {media.status}</p>
-                  <p><strong>Genre:</strong> {media.genres}</p>
-                  <button onClick={() => {
+                  <p className='center-title'>
+                    <Link to={`/details/${media.anilist_id}`} className='media-title'>
+                      <strong>{media.title?.length > 25
+                        ? media.title.slice(0, 22) + "..."
+                        : media.title}</strong>
+                    </Link>
+                  </p>
+                  <p className='score-list'><strong>Score:</strong> {media.score}</p>
+                  <p className='status-list'>
+                    <strong>Status:</strong>{" "}
+                    <span className={`status-badge ${getStatusClass(media.status)}`}>
+                      {media.status}
+                    </span>
+                  </p>
+                  <p className='type-list'><strong>Type:</strong> {media.format}</p>
+                  <button className="edit-list-button" onClick={() => {
                     setEditId(media.id);
                     setScoreId(media.score.toString());
                     setStatus(media.status);
                   }}>Edit</button>
-                  <button onClick={() => handleDelete(media.id)}>Delete</button>
+                  <button className="delete-list-button" onClick={() => handleDelete(media.id)}>Delete</button>
                 </div>
               </div>
 

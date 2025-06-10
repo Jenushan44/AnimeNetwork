@@ -13,7 +13,7 @@ export const handleAddShelf = async (anime) => {
       anilist_id: anime.id,
       genre: "N/A",
       score: "-",
-      status: "-",
+      status: anime.status,
       episodes: anime.episodes || 0,
       coverImage: anime.coverImage.large,
       format: anime.format

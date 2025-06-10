@@ -403,11 +403,26 @@ body {
   transition: background-color 1s ease;
 }
 
-.scroll-left:hover,
-.scroll-right:hover,
-.scroll-btn:hover {
+.character-scroll-left,
+.character-scroll-right {
+  background-color: #facc15;
+  border: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.character-scroll-left:hover,
+.character-scroll-right:hover {
   background-color: #eab308;
 }
+
 
 .scroll-right {
   position: absolute;
@@ -426,6 +441,43 @@ body {
   position: absolute;
 }
 
+
+
+.character-scroll-left,
+.character-scroll-right {
+  background-color: #facc15;
+  border: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.character-scroll-left:hover,
+.character-scroll-right:hover {
+  background-color: #eab308;
+}
+
+
+.character-scroll-left,
+.character-scroll-right {
+  position: absolute;
+}
+
+.character-scroll-left {
+  position: relative;
+  /*left: 35px;
+  top: -580px;*/
+  transform: translateY(-100%) translateX(0px);
+}
+
+.character-scroll-right {
+  position: relative;
+  transform: translateY(-100%) translateX(0px);
+}
 
 
 .season-layout {
@@ -694,6 +746,272 @@ body {
 
 .search-rank {
   margin-top: -10px;
+}
+
+.image-description {
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.04);
+  max-width: 850px;
+  margin: 40px auto 0;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.image-description img {
+  width: 250px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.character-section {
+  max-width: 1000px;
+  margin: -80px auto 60px auto;
+  text-align: center;
+}
+
+
+.character-section h1 {
+  font-size: 1.6rem;
+  color: #facc15;
+  margin-bottom: 10px;
+  margin-top: 40px;
+  text-align: center;
+  border-bottom: 1px solid #333;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 8px;
+}
+
+.character-section.embedded {
+  margin: 30px 0 0 0;
+  text-align: center;
+}
+
+
+.description-title {
+  position: relative;
+  text-align: center;
+  right: 10px;
+}
+
+.description-info {
+  flex: 1;
+  color: #ccc;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.description-info h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #facc15;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.detail-descrip {
+  font-size: 1rem;
+  color: #ccc;
+  white-space: pre-wrap;
+  padding-top: 8px;
+}
+
+
+.detail-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+
+  background-color: #1a1a1a;
+  border-radius: 16px;
+  padding: 20px 40px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.04);
+
+  max-width: 500px;
+  width: 100%;
+  margin: 10px auto 60px auto;
+  flex-wrap: nowrap;
+}
+
+
+
+
+.left-info,
+.right-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+
+.image-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.detail-add-button {
+  background-color: #facc15;
+  color: #000;
+  font-weight: bold;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.detail-add-button:hover {
+  background-color: #eab308;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(250, 204, 21, 0.2);
+}
+
+
+.character-wrapper {
+  margin-top: -80px;
+}
+
+.character-title {
+  font-size: 1.3rem;
+  color: #facc15;
+  font-weight: bold;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 4px;
+  text-align: center;
+}
+
+.character-scroll-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 10px;
+}
+
+.character-scroll {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  padding: 1rem 0;
+  max-width: 720px;
+  scrollbar-width: none;
+}
+
+.character-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.character-card {
+  flex: 0 0 auto;
+  width: 100px;
+  text-align: center;
+}
+
+.character-card img {
+  width: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.character-scroll-left,
+.character-scroll-right {
+  background-color: #facc15;
+  border: none;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.character-scroll-left:hover,
+.character-scroll-right:hover {
+  background-color: #eab308;
+}
+
+
+
+.left-info p,
+.right-info p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+
+.anime-detail-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.anime-section-heading {
+  position: relative;
+  font-size: 1.4rem;
+  color: #facc15;
+  font-weight: bold;
+  border-bottom: 1px solid #333;
+  padding-bottom: 6px;
+  text-align: center;
+  margin: 10px auto 20px auto;
+}
+
+.character-section h1 {
+  font-size: 1.4rem;
+  color: #facc15;
+  font-weight: bold;
+  text-align: center;
+  margin: 50px auto 10px;
+  border-bottom: 1px solid #333;
+  width: fit-content;
+  padding-bottom: 4px;
+}
+
+.details-section hr {
+  border: 0;
+  height: 1px;
+  background-color: #333;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.details-section h1 {
+  text-align: center;
+  margin-top: 40px;
+  color: #ffffff;
+}
+
+.details-section button {
+  background-color: #facc15;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin: 30px auto;
+  display: block;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.details-section button:hover {
+  background-color: #eab308;
 }
 
 

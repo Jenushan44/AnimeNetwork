@@ -1,11 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import DetailPage from './DetailPage.js';
 import { useState, useEffect, useRef } from 'react';
 import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
+import useHorizontalScroll from "./useHorizontalScroll";
 
 
 function getCurrentSeason() {
@@ -31,15 +32,10 @@ function Home() {
   const featured = trending[bannerIndex]; // the most trending anime
   const [category, setCategory] = useState("airing");
   const [currentList, setCurrentList] = useState("all");
-  const gridRef = useRef(null);
+  const { gridRef, scrollLeft, scrollRight } = useHorizontalScroll();
 
-  const scrollLeft = () => {
-    gridRef.current.scrollBy({ left: -500, behavior: "smooth" });
-  };
 
-  const scrollRight = () => {
-    gridRef.current.scrollBy({ left: 500, behavior: "smooth" });
-  };
+
   function Next() {
     if (bannerIndex === trending.length - 1) {
       setBannerIndex((bannerIndex) => 0)
@@ -186,20 +182,29 @@ function ProfilePage() {
   );
 }
 
-function List() {
+function List({ editStatus, setStatus }) {
   const [mediaList, setMediaList] = useState([]);
   const [editId, setEditId] = useState('');
   const [editScore, setScoreId] = useState('');
-  const [editStatus, setStatus] = useState('');
   const [filterStatus, editFilterStatus] = useState("All")
   const [sortBy, setSortBy] = useState("") // stores selected filter
-
+  const location = useLocation(); // gives information about current URL/page
+  const scrollReference = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:5000/list");
       const data = await response.json();
       setMediaList(data);
+      if (scrollReference.current) {
+        scrollReference.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      const editId = location.state?.editId;
+      if (editId && scrollReference.current) {
+        scrollReference.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
     };
     fetchData();
   }, []);
@@ -300,7 +305,7 @@ function List() {
       <div className="media-grid">
 
         {sortedList.map((media) => (
-          <div key={media.id} className="media-entry">
+          <div key={media.id} className="media-entry" ref={location.state?.editId === media.anilist_id ? scrollReference : null}>
             {editId == media.id ? (
               <form
                 className="edit-form"
@@ -375,13 +380,16 @@ function List() {
 }
 
 function App() {
+  const [editStatus, setStatus] = useState('');
+
+
   return (
     <Router>
       <NavBar /> { }
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/list" element={<List />} />
-        <Route path="/details/:id" element={<DetailPage />} />
+        <Route path="/list" element={<List editStatus={editStatus} setStatus={setStatus} />} />
+        <Route path="/details/:id" element={<DetailPage editStatus={editStatus} setStatus={setStatus} />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/results" element={<SearchResults />} /> { }
       </Routes>

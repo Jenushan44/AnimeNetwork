@@ -1,31 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import DetailPage from './DetailPage.js';
 import React, { useState, useEffect, useRef } from 'react';
 import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
-import useHorizontalScroll from "./useHorizontalScroll";
+import useHorizontalScroll from "./hooks/useHorizontalScroll.js";
 import RegisterPage from './RegisterPage';
 import { auth } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoginPage from "./LoginPage";
+import Popup from "./components/Popup";
+import { getCurrentSeason, formatDate } from './utils/date';
 
-
-
-function getCurrentSeason() {
-  const date = new Date(); // Contains current Date object that contains current data and time
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  const season =
-    month >= 1 && month <= 3 ? "WINTER" :
-      month >= 4 && month <= 6 ? "SPRING" :
-        month >= 7 && month <= 9 ? "SUMMER" :
-          "FALL";
-
-  return { season, year };
-}
 
 function Home() {
 
@@ -37,8 +23,6 @@ function Home() {
   const [category, setCategory] = useState("airing");
   const [currentList, setCurrentList] = useState("all");
   const { gridRef, scrollLeft, scrollRight } = useHorizontalScroll();
-
-
 
   function Next() {
     if (bannerIndex === trending.length - 1) {
@@ -426,19 +410,6 @@ function App() {
         console.error("Logout error: ", error.message);
       });
   }
-
-  function Popup({ message, onClose }) {
-    return (
-      <div className="popup-container">
-        <div className="popup-message">
-          {message}
-          <button onClick={onClose}>×</button>
-        </div>
-      </div>
-    );
-  }
-
-
 
   return (
     <>

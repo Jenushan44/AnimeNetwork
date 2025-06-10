@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { handleAddShelf } from "./utils/api";
-import useHorizontalScroll from "./useHorizontalScroll";
+import useHorizontalScroll from "./hooks/useHorizontalScroll";
 import { auth } from "./firebase";
 
 
@@ -108,18 +108,7 @@ const DetailPage = ({ editStatus, setStatus, setPopupMsg }) => {
                 className="detail-add-button"
                 onClick={async () => {
                   const user = auth.currentUser;
-                  if (!user) {
-                    setPopupMsg("You must be logged in to add to your shelf");
-                    setTimeout(() => setPopupMsg(null), 3000);
-
-                    return;
-                  }
-
-                  await handleAddShelf(valueData);
-                  setPopupMsg("Added to your shelf");
-                  setTimeout(() => setPopupMsg(null), 3000);
-
-                  navigate("/list", { state: { editId: valueData.id } });
+                  await handleAddShelf(valueData, setPopupMsg, navigate);
                 }}
               >Add to shelf</button>
 

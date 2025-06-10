@@ -1,9 +1,13 @@
 import { auth } from "../firebase";
 
-export const handleAddShelf = async (anime) => {
+export const handleAddShelf = async (anime, setPopupMsg = null, navigate = null) => {
   const user = auth.currentUser;
   if (!user) {
     console.error("No user logged in.");
+    if (setPopupMsg) {
+      setPopupMsg("You must be logged in to add to your shelf");
+      setTimeout(() => setPopupMsg(null), 3000);
+    }
     return;
   }
 
@@ -28,6 +32,12 @@ export const handleAddShelf = async (anime) => {
     })
   });
 
-  const result = await response.json();
-  console.log(result);
-}
+  if (setPopupMsg) {
+    setPopupMsg("Added to your shelf");
+    setTimeout(() => setPopupMsg(null), 3000);
+  }
+
+  if (navigate) {
+    navigate("/list", { state: { editId: anime.id } });
+  }
+};

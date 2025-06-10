@@ -5,3 +5,6 @@ instance/
 *.db
 test_db.py
 reset_db.py
+firebase_admin_setup.py 
+anime
+*.json

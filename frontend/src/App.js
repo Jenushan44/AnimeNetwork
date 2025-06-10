@@ -154,8 +154,6 @@ function Home() {
               ))}
             </div>
             <button className="scroll-right" onClick={scrollRight}>{'>'}</button>
-
-
           </div>
         </div>
       </section >
@@ -170,14 +168,25 @@ function ProfilePage() {
 
   useEffect(() => { // When profile page shows up run this (useEffect)
     async function fetchData() {
-      const result = await fetch("http://localhost:5000/profile")  // Sends a GET request to Flask backend at /profile and retrieves all data 
-      const data = await result.json()
-      setTotalTime(data.total)
-      setTotalEpisode(data.episodes)
+      const user = auth.currentUser;
+      if (!user) return; // Checks if a user is logged in
+
+      const token = await user.getIdToken();
+
+      const result = await fetch("http://localhost:5000/profile", { // Sends a GET request to Flask backend at /profile and retrieves all data 
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // attaches firebase ID token using Bearer token format
+        }
+      });
+
+      const data = await result.json();
+      setTotalTime(data.total);
+      setTotalEpisode(data.episodes);
     }
     fetchData();
-
   }, []);
+
 
   return (
     <div>
@@ -199,9 +208,21 @@ function List({ editStatus, setStatus }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/list");
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const token = await user.getIdToken();
+
+      const response = await fetch("http://localhost:5000/list", {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+
+      });
       const data = await response.json();
       setMediaList(data);
+
       if (scrollReference.current) {
         scrollReference.current.scrollIntoView({ behavior: "smooth", block: "center" });
       }

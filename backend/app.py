@@ -6,6 +6,8 @@ from models import Anime
 from extensions import db
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
+from firebase_admin_setup import auth  
+
 
 
 import requests
@@ -70,8 +72,21 @@ def home():
 
 @app.route('/list', methods=['GET'])
 def get_list():
+    
+    auth_header = request.headers.get("Authorization") # gets the authorization header from the incoming request
+    if not auth_header: 
+      return jsonify({"error": "Missing Authorization header"}), 401
+    
+    try: 
+        token = auth_header.split("Bearer ")[1]  # splits the string to take just the token
+        decoded_token = auth.verify_id_token(token) # Gives an error if token is invalid
+        uid = decoded_token['uid']
+    except Exception as e: 
+        return jsonify({"error": "Invalid token"}), 401
+
+
     # Fetches data from the database 
-    show_list = Anime.query.all()
+    show_list = Anime.query.filter_by(user_id=uid).all()
     result = []
     for item in show_list: 
         result.append({
@@ -89,6 +104,17 @@ def get_list():
 
 @app.route('/list', methods=['POST'])
 def add_list():
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+      return jsonify({"error": "Missing Authorization header"}), 401
+
+    try:
+        token = auth_header.split("Bearer ")[1]
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token['uid']
+    except Exception as e:
+        return jsonify({"error": "Invalid token"}), 401
+
     # Gets JSON data from body of incoming HTTP request to store in data variable 
     data = request.get_json()
     new_item = Anime(
@@ -99,7 +125,8 @@ def add_list():
         episodes=data["episodes"],
         coverImage=data["coverImage"],
         anilist_id=data["anilist_id"],
-        format=data.get("format", "TV")
+        format=data.get("format", "TV"),
+        user_id=uid
 
     )
     db.session.add(new_item)
@@ -108,6 +135,18 @@ def add_list():
 
 @app.route('/list/<int:show_id>', methods=['DELETE'])
 def delete_list(show_id):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+      return jsonify({"error": "Missing Authorization header"}), 401
+
+    try:
+        token = auth_header.split("Bearer ")[1]
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token["uid"]
+    except Exception:
+        return jsonify({"error": "Invalid token"}), 401
+
+
     item = Anime.query.get(show_id) # Find anime entry in database with id 
     if not item:
         abort(404, description="Anime not found") 
@@ -118,6 +157,20 @@ def delete_list(show_id):
 
 
 @app.route('/list/<int:show_id>', methods=['PUT'])
+def update_score(show_id):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+      return jsonify({"error": "Missing Authorization header"}), 401
+
+    try:
+        token = auth_header.split("Bearer ")[1]
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token["uid"]
+    except Exception:
+        return jsonify({"error": "Invalid token"}), 401
+
+
+
 def update_score(show_id): 
     item = Anime.query.get(show_id)
     if not item:
@@ -133,7 +186,18 @@ def update_score(show_id):
 
 @app.route('/profile', methods=['GET'])
 def view_profile(): 
-    show_list = Anime.query.all()
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+      return jsonify({"error": "Missing Authorization header"}), 401
+
+    try:
+        token = auth_header.split("Bearer ")[1]
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token["uid"]
+    except Exception:
+        return jsonify({"error": "Invalid token"}), 401
+
+    show_list = Anime.query.filter_by(user_id=uid).all() # Makes sure that each user only sees anime on their account
     time_watched = 0
     episodes_watched = 0
     for show in show_list: 

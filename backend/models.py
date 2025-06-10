@@ -14,3 +14,4 @@ class Anime(db.Model):
     anilist_id = db.Column(db.Integer, nullable=False)
     format = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.String, nullable=False)

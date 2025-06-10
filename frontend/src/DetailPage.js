@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { handleAddShelf } from "./utils/api";
 import useHorizontalScroll from "./useHorizontalScroll";
+import { auth } from "./firebase";
+
+
 
 
 const query = `
@@ -57,13 +60,14 @@ const query = `
   }
 `;
 
-const DetailPage = ({ editStatus, setStatus }) => {
+const DetailPage = ({ editStatus, setStatus, setPopupMsg }) => {
   const { id } = useParams()
   const [valueData, setValueData] = useState(null);
   const navigate = useNavigate() // Used to redirect to another page
   const location = useLocation();
   const scrollReference = useRef(null);
   const { gridRef, scrollLeft, scrollRight } = useHorizontalScroll();
+
 
 
   useEffect(() => {
@@ -100,10 +104,23 @@ const DetailPage = ({ editStatus, setStatus }) => {
           <div className="image-description">
             <div className="image-column">
               <img src={valueData.coverImage.large} alt={valueData.title.english} />
-              <button className="detail-add-button" onClick={async () => {
-                await handleAddShelf(valueData);
-                navigate("/list", { state: { editId: valueData.id } });
-              }}
+              <button
+                className="detail-add-button"
+                onClick={async () => {
+                  const user = auth.currentUser;
+                  if (!user) {
+                    setPopupMsg("You must be logged in to add to your shelf");
+                    setTimeout(() => setPopupMsg(null), 3000);
+
+                    return;
+                  }
+
+                  await handleAddShelf(valueData);
+                  setPopupMsg("Added to your shelf");
+                  setTimeout(() => setPopupMsg(null), 3000);
+
+                  navigate("/list", { state: { editId: valueData.id } });
+                }}
               >Add to shelf</button>
 
             </div>
@@ -164,15 +181,8 @@ const DetailPage = ({ editStatus, setStatus }) => {
                       : "Unknown"}
                   </p>
                 </div>
-
               </div>
-
             </div>
-
-
-
-
-
             <div className="character-wrapper">
               <h1 className="character-title">Characters</h1>
               <div className="character-scroll-container">
@@ -192,7 +202,6 @@ const DetailPage = ({ editStatus, setStatus }) => {
           </div>
         </div>
       )}
-
     </div>
   )
 }

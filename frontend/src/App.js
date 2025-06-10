@@ -1,9 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import DetailPage from './DetailPage.js';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
 import useHorizontalScroll from "./useHorizontalScroll";
@@ -11,7 +10,6 @@ import RegisterPage from './RegisterPage';
 import { auth } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoginPage from "./LoginPage";
-
 
 
 
@@ -410,6 +408,7 @@ function App() {
   const [editStatus, setStatus] = useState('');
   const [user, setUser] = useState(null); // store currently authenticated Firebase user
   // Initially set to null meaning noone is logged in
+  const [popupMsg, setPopupMsg] = useState(null);
 
   useEffect(() => { // Checks whether user is logged-in or not and keeps checking to update latest login status
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -428,20 +427,33 @@ function App() {
       });
   }
 
+  function Popup({ message, onClose }) {
+    return (
+      <div className="popup-container">
+        <div className="popup-message">
+          {message}
+          <button onClick={onClose}>×</button>
+        </div>
+      </div>
+    );
+  }
+
+
 
   return (
-    <Router>
-      <NavBar user={user} handleLogout={handleLogout} /> { }
+    <>
+      {popupMsg && <Popup message={popupMsg} onClose={() => setPopupMsg(null)} />}
+      <NavBar user={user} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/list" element={<List editStatus={editStatus} setStatus={setStatus} />} />
-        <Route path="/details/:id" element={<DetailPage editStatus={editStatus} setStatus={setStatus} />} />
+        <Route path="/details/:id" element={<DetailPage editStatus={editStatus} setStatus={setStatus} setPopupMsg={setPopupMsg} />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/results" element={<SearchResults />} /> { }
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 

@@ -24,7 +24,14 @@ function NavBar({ user, handleLogout }) {
       <div className="logo-bar">
         <img src={logo} className="logo-img" />
         {user ? (
-          <><span>Hello, {user.displayName || user.email}</span> <button className="logout-btn" onClick={handleLogout}>Logout</button></>
+          <><span>Hello, {user.displayName || user.email}</span>
+            <button className="logout-btn" onClick={() => {
+              handleLogout();
+              navigate("/");
+            }}>
+              Logout
+            </button>
+          </>
         ) : (
           <>
             <button className="login-btn" onClick={() => navigate("/login")}>Login</button>

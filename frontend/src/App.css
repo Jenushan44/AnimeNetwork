@@ -16,6 +16,21 @@ body {
   position: sticky;
   top: 0;
   z-index: 999;
+  margin-bottom: -9px;
+}
+
+.logo-container {
+  margin-right: 20px;
+}
+
+.logo-img {
+  height: 50px;
+}
+
+.logo-bar {
+  background-color: rgb(10, 10, 10);
+  padding-top: 10px;
+  padding-bottom: 0px;
 }
 
 .nav-left a {
@@ -49,6 +64,62 @@ body {
 
 .nav-search button:hover {
   background-color: #eab308;
+}
+
+.logout-btn {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -20px;
+  left: 947px;
+  z-index: 9999;
+}
+
+.login-btn {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  top: -20px;
+  left: 1027px;
+  z-index: 9999;
+}
+
+.signup-btn {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: fixed;
+  top: 20px;
+  right: 125px;
+  z-index: 9999;
+}
+
+.signup-btn:hover,
+.login-btn:hover,
+.logout-btn:hover {
+  background-color: #FFD700;
+  color: black;
+  border-color: #FFD700;
 }
 
 
@@ -1013,6 +1084,72 @@ body {
 .details-section button:hover {
   background-color: #eab308;
 }
+
+.register-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background-color: #1a1a1a;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  color: white;
+  font-family: sans-serif;
+}
+
+.register-title {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 28px;
+}
+
+.register-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: white;
+}
+
+.register-error {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #FFD700;
+  color: black;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  transition: 0.3s ease;
+}
+
+.primary-button:hover {
+  background-color: #e6c200;
+}
+
+.google-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #d3d3d3;
+  font-weight: bold;
+
+}
+
+
 
 
 @media (max-width: 768px) {

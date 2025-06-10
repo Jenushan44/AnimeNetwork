@@ -8,6 +8,11 @@ import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
 import useHorizontalScroll from "./useHorizontalScroll";
 import RegisterPage from './RegisterPage';
+import { auth } from "./firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import LoginPage from "./LoginPage";
+
+
 
 
 function getCurrentSeason() {
@@ -382,11 +387,30 @@ function List({ editStatus, setStatus }) {
 
 function App() {
   const [editStatus, setStatus] = useState('');
+  const [user, setUser] = useState(null); // store currently authenticated Firebase user
+  // Initially set to null meaning noone is logged in
+
+  useEffect(() => { // Checks whether user is logged-in or not and keeps checking to update latest login status
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  function handleLogout() {
+    signOut(auth)
+      .then(() => {
+        console.log("User signedout");
+      })
+      .catch((error) => {
+        console.error("Logout error: ", error.message);
+      });
+  }
 
 
   return (
     <Router>
-      <NavBar /> { }
+      <NavBar user={user} handleLogout={handleLogout} /> { }
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/list" element={<List editStatus={editStatus} setStatus={setStatus} />} />
@@ -394,7 +418,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/results" element={<SearchResults />} /> { }
         <Route path="/register" element={<RegisterPage />} />
-
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   );

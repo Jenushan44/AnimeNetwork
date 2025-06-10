@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -11,6 +11,7 @@ function RegisterPage() {
   const navigate = useNavigate() // Redirects to page
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // Disables buttons that tracks if login is currently running 
+  const [username, setUsername] = useState("");
 
   function handleSubmit(e) {
     if (loading) return; // Prevents user from double clicking
@@ -18,18 +19,21 @@ function RegisterPage() {
     setLoading(true);
 
     e.preventDefault(); // Stops the page from reloading
-    if (!email || !password) {
-      setError("Please fill in both email and password"); // Verfies that both password and email field are filled
+    if (!email || !password || !username) {
+      setError("Please fill in username, email and password"); // Verfies that both password and email field are filled
       return;
     }
     createUserWithEmailAndPassword(auth, email.trim(), password)
       // Trim accidental whitespace after user enters email
       .then((userCredential) => {
-        console.log("user created: ", userCredential.user)
+        return updateProfile(userCredential.user, {
+          displayName: username,
+        });
+      })
+      .then(() => {
         navigate("/"); // On successful registration, redirects to home page
       })
       .catch((err) => {
-        console.error("Error: ", err.message);
         setError(err.message);
       })
   }
@@ -55,35 +59,48 @@ function RegisterPage() {
 
 
   return (
-    <div>
-      <h1>Register</h1>
+    <div className="register-container">
+      <h1 className="register-title">Sign up</h1>
 
-      <form onSubmit={(handleSubmit)}>
-        <p>Enter email: </p>
+      <form className="register-form" onSubmit={handleSubmit}>
+
+        <label htmlFor='username'>Username:</label>
         <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter a username"
+        />
+
+        <label htmlFor="email">Email:</label>
+        <input
+          id="email"
           type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <p>You typed {email}</p>
+          placeholder="Enter your email"
+        />
 
-        <p>Enter password: </p>
+        <label htmlFor="password">Password:</label>
         <input
+          id="password"
           type='password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
         />
-        <button type='submit'>Register</button>
-        {error && <p style={{ color: "red" }}>{error}</p>}
 
 
-        <button onClick={handleGoogleLogin}>Sign in with Google</button>
+        {error && <p className="register-error">{error}</p>}
+
+        <button type='submit' className="primary-button" disabled={loading}>
+          Register
+        </button>
+        <button type='button' className="google-button" onClick={handleGoogleLogin} disabled={loading}>
+          Sign in with Google
+        </button>
       </form>
-
-
-
     </div>
-
   );
 }
 

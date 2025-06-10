@@ -4,7 +4,7 @@ import { useState } from 'react'
 import logo from './assets/anime-network-logo.png';
 
 
-function NavBar() {
+function NavBar({ user, handleLogout }) {
   const [anime, setAnime] = useState(""); // Holds text typed into search bar 
   const navigate = useNavigate(); //Redirects user to different route 
 
@@ -15,12 +15,27 @@ function NavBar() {
     setAnime(""); // Clear search bar
   };
 
+  const handleRegisterClick = () => {
+    navigate("/register");
+  }
+
   return (
     <div className="navbar-wrapper">
       <div className="logo-bar">
         <img src={logo} className="logo-img" />
-        <button className="login-btn">Login</button>
-        <button className="signup-btn">Sign up</button>
+        {user ? (
+          <><span>Hello, {user.displayName || user.email}</span> <button className="logout-btn" onClick={handleLogout}>Logout</button></>
+        ) : (
+          <>
+            <button className="login-btn" onClick={() => navigate("/login")}>Login</button>
+            <button className="signup-btn" onClick={() => navigate("/register")}>Sign up</button>
+
+
+            {/*Displays information on navbar based on whether or not user is logged in*/}
+          </>
+        )}
+
+
       </div>
       <nav className="navbar">
         <div className="nav-left">

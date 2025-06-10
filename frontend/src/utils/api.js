@@ -32,6 +32,14 @@ export const handleAddShelf = async (anime, setPopupMsg = null, navigate = null)
     })
   });
 
+  if (response.status === 409) {
+    if (setPopupMsg) {
+      setPopupMsg("Anime already in your list");
+      setTimeout(() => setPopupMsg(null), 3000);
+    }
+    return;
+  }
+
   if (setPopupMsg) {
     setPopupMsg("Added to your shelf");
     setTimeout(() => setPopupMsg(null), 3000);

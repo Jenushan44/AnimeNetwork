@@ -117,6 +117,12 @@ def add_list():
 
     # Gets JSON data from body of incoming HTTP request to store in data variable 
     data = request.get_json()
+
+    # Checks if anime is already in user list 
+    existing = Anime.query.filter_by(user_id=uid, anilist_id=data["anilist_id"]).first()
+    if existing:
+        return jsonify({"error": "Anime already in your list"}), 409
+
     new_item = Anime(
         title=data['title'],
         genre=data['genre'],

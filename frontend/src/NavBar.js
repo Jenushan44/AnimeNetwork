@@ -24,20 +24,22 @@ function NavBar({ user, handleLogout }) {
       <div className="logo-bar">
         <img src={logo} className="logo-img" />
         {user ? (
-          <><span>Hello, {user.displayName || user.email}</span>
+          <div className="user-control">
+            <div className="user-greeting">
+              <span>Hello, {user.displayName || user.email}</span>
+            </div>
+
             <button className="logout-btn" onClick={() => {
               handleLogout();
               navigate("/");
             }}>
               Logout
             </button>
-          </>
+          </div>
         ) : (
           <>
             <button className="login-btn" onClick={() => navigate("/login")}>Login</button>
             <button className="signup-btn" onClick={() => navigate("/register")}>Sign up</button>
-
-
             {/*Displays information on navbar based on whether or not user is logged in*/}
           </>
         )}

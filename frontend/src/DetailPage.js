@@ -190,26 +190,6 @@ const DetailPage = ({ editStatus, setStatus }) => {
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
       )}
 

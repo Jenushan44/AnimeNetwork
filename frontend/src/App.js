@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
 import useHorizontalScroll from "./useHorizontalScroll";
+import RegisterPage from './RegisterPage';
 
 
 function getCurrentSeason() {
@@ -392,6 +393,8 @@ function App() {
         <Route path="/details/:id" element={<DetailPage editStatus={editStatus} setStatus={setStatus} />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/results" element={<SearchResults />} /> { }
+        <Route path="/register" element={<RegisterPage />} />
+
       </Routes>
     </Router>
   );

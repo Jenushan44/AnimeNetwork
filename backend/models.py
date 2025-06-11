@@ -5,7 +5,7 @@ from datetime import datetime
 
 class Anime(db.Model): 
     id = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(100), nullable=False, unique=True)
+    title = db.Column(db.String(100), nullable=False)
     genre = db.Column(db.String(100), nullable=False)
     score = db.Column(db.Integer, nullable=True)
     episodes = db.Column(db.Integer, nullable=False)

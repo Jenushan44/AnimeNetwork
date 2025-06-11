@@ -3,6 +3,9 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { setPersistence, browserSessionPersistence } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth"; // Sends a reset email to the user
+
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +13,27 @@ function LoginPage() {
   const [error, setError] = useState(""); // Stores any error message that happend during the login
   const [loading, setLoading] = useState(false); // Checks whether login is in progress
   const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true); // Allows switching between login and signup
+
+  function getFirebaseErrorMessage(code) {
+    switch (code) {
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        return "Incorrect email or password.";
+      case 'auth/too-many-requests':
+        return "Too many failed attempts. Please try again later.";
+      case 'auth/email-already-in-use':
+        return "Email is already registered. Please log in instead.";
+      case 'auth/invalid-email':
+        return "Invalid email address.";
+      case 'auth/weak-password':
+        return "Password should be at least 6 characters.";
+      case 'auth/popup-closed-by-user':
+        return "Google sign-in was cancelled.";
+      default:
+        return "An unexpected error occurred. Please try again.";
+    }
+  }
 
   function handleSubmit(e) {
     e.preventDefault(); // Prevents reload
@@ -23,37 +47,58 @@ function LoginPage() {
       return;
     }
 
-    signInWithEmailAndPassword(auth, email.trim(), password)
-      .then(() => {
-        navigate("/");
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    if (isLogin) {
+      setPersistence(auth, browserSessionPersistence) // Logs user out when browser/tab is closed
+        .then(() => {
+          return signInWithEmailAndPassword(auth, email.trim(), password);
+        })
+        .then(() => navigate("/"))
+        .catch(err => setError(getFirebaseErrorMessage(err.code)))
+        .finally(() => setLoading(false));
+    } else {
+      createUserWithEmailAndPassword(auth, email.trim(), password)
+        .then(() => navigate("/"))
+        .catch(err => setError(getFirebaseErrorMessage(err.code)))
+        .finally(() => setLoading(false));
+    }
 
   }
 
   function handleGoogleLogin() {
     const provider = new GoogleAuthProvider();
 
-    signInWithPopup(auth, provider)
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        const provider = new GoogleAuthProvider();
+        return signInWithPopup(auth, provider);
+      })
       .then((result) => {
         console.log("Google user: ", result.user);
         navigate('/');
       })
       .catch((error) => {
-        console.error("Google login error: ", error.message);
-        setError(error.message);
+        setError(getFirebaseErrorMessage(error.code));
       })
       .finally(() => {
         setLoading(false);
       });
+
   }
 
+  function handleForgotPassword() {
+    if (!email) {
+      setError("Please enter your email first.");
+      return;
+    }
 
+    sendPasswordResetEmail(auth, email.trim())
+      .then(() => {
+        setError("Password reset email sent.");
+      })
+      .catch((err) => {
+        setError(getFirebaseErrorMessage(err.code));
+      });
+  }
 
   return (
     <div className="register-container">
@@ -79,6 +124,10 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
         />
+
+        <div className="forgot-password-container">
+          <button type="button" onClick={handleForgotPassword} className="forgot-password-button">Forgot Password?</button>
+        </div>
 
 
         {error && <p className="login-error">{error}</p>}

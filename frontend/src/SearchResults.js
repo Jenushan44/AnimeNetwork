@@ -81,34 +81,35 @@ function SearchResults() {
             );
 
             return (
+              <Link to={`/details/${anime.id}`} key={anime.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="anime-entry">
+                  <img
+                    className="search-image"
+                    src={anime.coverImage.large}
+                    alt={anime.title.english}
+                  />
+                  <div className="search-info">
+                    <h3 className="search-title">
+                      {anime.title?.english || anime.title?.romaji || anime.title?.native || "Title not found"}
+                    </h3>
 
-              <div key={anime.id} className="anime-entry">
-                <img
-                  className="search-image"
-                  src={anime.coverImage.large}
-                  alt={anime.title.english}
-                />
-                <div className="search-info">
-                  <h3 className="search-title">
-                    {anime.title?.english || anime.title?.romaji || anime.title?.native || "Title not found"}
-                  </h3>
+                    <div className="search-info-row">
+                      <p className="search-format"><strong>{anime.format}</strong></p>
+                      <p className="search-episode">({anime.episodes} episodes)</p>
+                    </div>
 
-                  <div className="search-info-row">
-                    <p className="search-format"><strong>{anime.format}</strong></p>
-                    <p className="search-episode">({anime.episodes} episodes)</p>
+                    <div className="search-score-rank">
+                      <p className="search-scored">
+                        Scored: {(anime.averageScore / 10).toFixed(2) || "N/A"}
+                      </p>
+                      <p className="search-rank">Rank: {scoreRank ? `#${scoreRank.rank}` : "Not Ranked"}</p>
+                    </div>
+
+                    <button onClick={() => handleAddShelf(anime)} className="add-list-btn">Add to list</button>
+
                   </div>
-
-                  <div className="search-score-rank">
-                    <p className="search-scored">
-                      Scored: {(anime.averageScore / 10).toFixed(2) || "N/A"}
-                    </p>
-                    <p className="search-rank">Rank: {scoreRank ? `#${scoreRank.rank}` : "Not Ranked"}</p>
-                  </div>
-
-                  <button onClick={() => handleAddShelf(anime)} className="add-list-btn">Add to list</button>
-
                 </div>
-              </div>
+              </Link>
             );
           })}
       </div>

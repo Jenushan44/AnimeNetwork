@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-
+import { setPersistence, browserSessionPersistence } from "firebase/auth";
 
 function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -12,6 +12,26 @@ function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // Disables buttons that tracks if login is currently running 
   const [username, setUsername] = useState("");
+
+  function getFirebaseErrorMessage(code) {
+    switch (code) {
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        return "Incorrect email or password.";
+      case 'auth/too-many-requests':
+        return "Too many failed attempts. Please try again later.";
+      case 'auth/email-already-in-use':
+        return "Email is already in use.";
+      case 'auth/invalid-email':
+        return "Invalid email address.";
+      case 'auth/weak-password':
+        return "Password should be at least 6 characters.";
+      case 'auth/popup-closed-by-user':
+        return "Google sign-in was cancelled.";
+      default:
+        return "An unexpected error occurred. Please try again later.";
+    }
+  }
 
   function handleSubmit(e) {
     if (loading) return; // Prevents user from double clicking
@@ -23,37 +43,46 @@ function RegisterPage() {
       setError("Please fill in username, email and password"); // Verfies that both password and email field are filled
       return;
     }
-    createUserWithEmailAndPassword(auth, email.trim(), password)
-      // Trim accidental whitespace after user enters email
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        return createUserWithEmailAndPassword(auth, email.trim(), password);
+      })
       .then((userCredential) => {
         return updateProfile(userCredential.user, {
           displayName: username,
         });
       })
       .then(() => {
-        navigate("/"); // On successful registration, redirects to home page
+        navigate("/");
       })
       .catch((err) => {
-        setError(err.message);
+        setError(getFirebaseErrorMessage(err.code));
       })
+      .finally(() => {
+        setLoading(false);
+      });
+
   }
 
   function handleGoogleLogin() {
     const provider = new GoogleAuthProvider();
 
     // Starts sign-in with popup through google
-    signInWithPopup(auth, provider)
+    setPersistence(auth, browserSessionPersistence)
+      .then(() => {
+        const provider = new GoogleAuthProvider();
+        return signInWithPopup(auth, provider);
+      })
       .then((result) => {
-        console.log("Google user: ", result.user); // If login successful, result.user will hold all information such as name, email etc.
-        navigate('/') // redirect to home page
+        console.log("Google user: ", result.user);
+        navigate('/');
       })
       .catch((error) => {
-        console.error("Google login error: ", error.message);
-        setError(error.message);
+        setError(getFirebaseErrorMessage(error.code));
       })
       .finally(() => {
-        setLoading(false); // stops loading after sucess or error
-      })
+        setLoading(false);
+      });
 
   }
 

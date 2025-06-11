@@ -15,3 +15,4 @@ class Anime(db.Model):
     format = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.String, nullable=False)
+    duration = db.Column(db.Integer)

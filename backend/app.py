@@ -132,8 +132,8 @@ def add_list():
         coverImage=data["coverImage"],
         anilist_id=data["anilist_id"],
         format=data.get("format", "TV"),
-        user_id=uid
-
+        user_id=uid,
+        duration=data.get("duration", 24)
     )
     db.session.add(new_item)
     db.session.commit()
@@ -234,8 +234,18 @@ def view_profile():
     
     
     for show in show_list: 
-        time_watched += show.episodes * 24
-        episodes_watched += show.episodes
+
+        episodes = show.episodes or 1 
+        duration = show.duration or 24 
+        format = show.format or "TV"
+
+        if format == "MOVIE": 
+            time_watched += duration 
+        else: 
+            time_watched += episodes * duration 
+
+        episodes_watched += episodes 
+
 
         if isinstance(show.score, int):
           show_scores.append(show.score)

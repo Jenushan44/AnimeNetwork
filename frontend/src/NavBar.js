@@ -2,11 +2,26 @@ import { Link, useNavigate } from "react-router-dom";
 import "./App.css";
 import { useState } from 'react'
 import logo from './assets/anime-network-logo.png';
+import { auth } from "./firebase";
 
 
-function NavBar({ user, handleLogout }) {
+function NavBar({ user, handleLogout, setPopupMessage }) {
   const [anime, setAnime] = useState(""); // Holds text typed into search bar 
   const navigate = useNavigate(); //Redirects user to different route 
+
+  const handleProfileClick = () => {
+    if (!auth.currentUser) {
+      setPopupMessage("Please login or signup to view your profile");
+
+      setTimeout(() => { // Pop up message clears after 5 seconds
+        setPopupMessage("");
+      }, 5000);
+
+      navigate("/")
+    } else {
+      navigate("profile");
+    }
+  }
 
   const submitHandle = (event) => {
     event.preventDefault();
@@ -48,9 +63,11 @@ function NavBar({ user, handleLogout }) {
       </div>
       <nav className="navbar">
         <div className="nav-left">
-          <Link to="/">Home</Link>
-          <Link to="/list">MyList</Link>
-          <Link to="/profile">Profile</Link>
+          <Link className="nav-link" to="/">Home</Link>
+          <Link className="nav-link" to="/list">MyList</Link>
+          <button className="nav-link" onClick={handleProfileClick}>
+            Profile
+          </button>
         </div>
 
         <form onSubmit={submitHandle} className="nav-search">

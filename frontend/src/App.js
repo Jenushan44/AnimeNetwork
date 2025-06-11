@@ -28,6 +28,7 @@ function Home() {
   const [category, setCategory] = useState("airing");
   const [currentList, setCurrentList] = useState("all");
   const { gridRef, scrollLeft, scrollRight } = useHorizontalScroll();
+  const [popupMessage, setPopupMessage] = useState("");
 
   function Next() {
     if (bannerIndex === trending.length - 1) {
@@ -493,7 +494,7 @@ function App() {
   return (
     <>
       {popupMsg && <Popup message={popupMsg} onClose={() => setPopupMsg(null)} />}
-      <NavBar user={user} handleLogout={handleLogout} />
+      <NavBar user={user} setPopupMessage={setPopupMsg} handleLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/list" element={<List editStatus={editStatus} setStatus={setStatus} />} />

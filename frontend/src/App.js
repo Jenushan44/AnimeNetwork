@@ -1,17 +1,22 @@
-import './App.css';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import DetailPage from './DetailPage.js';
 import React, { useState, useEffect, useRef } from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./firebase";
+import * as ReactChartJS2 from 'react-chartjs-2';
+import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+
+import './App.css';
 import NavBar from "./NavBar";
 import SearchResults from "./SearchResults";
-import useHorizontalScroll from "./hooks/useHorizontalScroll.js";
+import DetailPage from './DetailPage.js';
 import RegisterPage from './RegisterPage';
-import { auth } from "./firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
 import LoginPage from "./LoginPage";
 import Popup from "./components/Popup";
+import useHorizontalScroll from "./hooks/useHorizontalScroll.js";
 import { getCurrentSeason, formatDate } from './utils/date';
+Chart.register(ArcElement, Tooltip, Legend);
 
+const { Doughnut } = ReactChartJS2;
 
 function Home() {
 
@@ -145,8 +150,6 @@ function Home() {
 
 function ProfilePage() {
 
-  const [totalTime, setTotalTime] = useState(0)
-  const [totalEpisodes, setTotalEpisode] = useState(0)
   const user = auth.currentUser;
   const [stats, setStats] = useState(null);
   const location = useLocation(); // gives information about current URL/page
@@ -175,21 +178,55 @@ function ProfilePage() {
     return <p className="profile-loading">Loading stats...</p>;
   }
 
+  const statusCounts = stats.status_counts || {};
+  const chartData = {
+    labels: ["Watching", "Completed", "On Hold", "Dropped", "Plan to Watch"],
+    datasets: [{
+      data: [
+        statusCounts["Watching"] || 0,
+        statusCounts["Completed"] || 0,
+        statusCounts["On Hold"] || 0,
+        statusCounts["Dropped"] || 0,
+        statusCounts["Plan to Watch"] || 0,
+      ],
+      backgroundColor: ['#3b82f6', '#22c55e', '#eab308', '#ef4444', '#a855f7'],
+      borderWidth: 1,
+    }]
+  };
+
+
+
   return (
     <div className="profile-container">
       <h1 className="profile-title">Anime Stats</h1>
+      {user && (
+        <h2 className="profile-username">Welcome, {user.displayName || user.email}</h2>
+      )}
+
       <div className="profile-grid">
         <div className="profile-stat"><strong>Days:</strong> {stats.total_days}</div>
         <div className="profile-stat"><strong>Mean Score:</strong> {stats.mean_score}</div>
         <div className="profile-stat"><strong>Total Entries:</strong> {stats.total_entries}</div>
         <div className="profile-stat"><strong>Episodes:</strong> {stats.episodes_watched}</div>
+      </div>
 
-        <div className="profile-status">
-          <p><span className="watching-dot" /> Watching: {stats.status_counts['Watching'] ?? 0}</p>
-          <p><span className="completed-dot" /> Completed: {stats.status_counts['Completed'] || 0}</p>
-          <p><span className="onhold-dot" /> On Hold: {stats.status_counts['On Hold'] || 0}</p>
-          <p><span className="dropped-dot" /> Dropped: {stats.status_counts['Dropped'] || 0}</p>
-          <p><span className="plantowatch-dot" /> Plan to Watch: {stats.status_counts['Plan to Watch'] || 0}</p>
+      <div className="chart-wrapper">
+        <h3>Status Breakdown</h3>
+        <div style={{ width: "300px", height: "300px" }}>
+          <Doughnut data={chartData} />
+        </div>
+      </div>
+
+
+      <div className="recent-section">
+        <h3>Last 10 Added</h3>
+        <div className="recent-grid">
+          {stats.recent_entries?.map((anime, index) => (
+            <Link to={`/details/${anime.id}`} key={index} className="recent-card">
+              <img src={anime.coverImage} alt={anime.title} />
+              <p>{anime.title.length > 20 ? anime.title.slice(0, 17) + '...' : anime.title}</p>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

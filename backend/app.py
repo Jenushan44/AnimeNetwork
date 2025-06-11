@@ -218,7 +218,6 @@ def view_profile():
 
     show_list = Anime.query.filter_by(user_id=uid).all() # Makes sure that each user only sees anime on their account
     
-    
     time_watched = 0
     total_entries = len(show_list)
     episodes_watched = 0
@@ -231,21 +230,34 @@ def view_profile():
         "Plan to Watch": 0
     }
 
-    scores = []
+    show_scores = []
     
     
     for show in show_list: 
         time_watched += show.episodes * 24
         episodes_watched += show.episodes
-        total_days = round(time_watched/1440, 2)
-        show_scores = [show.score for show in show_list if isinstance(show.score, int)]
-    if show.status in status_counts:
-        status_counts[show.status] += 1
+
+        if isinstance(show.score, int):
+          show_scores.append(show.score)
+
+        if show.status in status_counts:
+          status_counts[show.status] += 1
+    total_days = round(time_watched/1440, 2)
     
     if show_scores:
-        mean_score = round(sum(show_scores) / len(show_scores), 2) 
+      mean_score = round(sum(show_scores) / len(show_scores), 2) 
     else: 
-        mean_score = 0.0
+      mean_score = 0.0
+    
+    recent = show_list[-10:][::-1]  # last 10 items, newest first
+    recent_data = [
+      {
+          "id": anime.anilist_id,
+          "title": anime.title,
+          "coverImage": anime.coverImage
+      }
+      for anime in recent
+    ]
     
     return jsonify({
         "total_days": total_days, # becomes data.total in React with total being the key
@@ -253,7 +265,8 @@ def view_profile():
         "mean_score": mean_score,
         "total_entries": total_entries,
         "episodes_watched": episodes_watched,
-        "status_counts": status_counts
+        "status_counts": status_counts,
+        "recent_entries": recent_data 
         
         }), 200
 

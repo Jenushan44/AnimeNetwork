@@ -147,6 +147,9 @@ function ProfilePage() {
 
   const [totalTime, setTotalTime] = useState(0)
   const [totalEpisodes, setTotalEpisode] = useState(0)
+  const user = auth.currentUser;
+  const [stats, setStats] = useState(null);
+  const location = useLocation(); // gives information about current URL/page
 
   useEffect(() => { // When profile page shows up run this (useEffect)
     async function fetchData() {
@@ -163,18 +166,32 @@ function ProfilePage() {
       });
 
       const data = await result.json();
-      setTotalTime(data.total);
-      setTotalEpisode(data.episodes);
+      setStats(data);
     }
     fetchData();
-  }, []);
+  }, [location]); // Refreshes profile page data every time user goes to it
 
+  if (!stats) { // Waits until the stats is loaded
+    return <p className="profile-loading">Loading stats...</p>;
+  }
 
   return (
-    <div>
-      <h1>Profile Page</h1>
-      <p>Days Watched: {totalTime} days</p>
-      <p>Episodes Watched: {totalEpisodes} episodes</p>
+    <div className="profile-container">
+      <h1 className="profile-title">Anime Stats</h1>
+      <div className="profile-grid">
+        <div className="profile-stat"><strong>Days:</strong> {stats.total_days}</div>
+        <div className="profile-stat"><strong>Mean Score:</strong> {stats.mean_score}</div>
+        <div className="profile-stat"><strong>Total Entries:</strong> {stats.total_entries}</div>
+        <div className="profile-stat"><strong>Episodes:</strong> {stats.episodes_watched}</div>
+
+        <div className="profile-status">
+          <p><span className="watching-dot" /> Watching: {stats.status_counts['Watching'] ?? 0}</p>
+          <p><span className="completed-dot" /> Completed: {stats.status_counts['Completed'] || 0}</p>
+          <p><span className="onhold-dot" /> On Hold: {stats.status_counts['On Hold'] || 0}</p>
+          <p><span className="dropped-dot" /> Dropped: {stats.status_counts['Dropped'] || 0}</p>
+          <p><span className="plantowatch-dot" /> Plan to Watch: {stats.status_counts['Plan to Watch'] || 0}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -185,8 +202,8 @@ function List({ editStatus, setStatus }) {
   const [editScore, setScoreId] = useState('');
   const [filterStatus, editFilterStatus] = useState("All")
   const [sortBy, setSortBy] = useState("") // stores selected filter
-  const location = useLocation(); // gives information about current URL/page
   const scrollReference = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -219,15 +236,28 @@ function List({ editStatus, setStatus }) {
   }, []);
 
   const handleUpdate = async (id) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const token = await user.getIdToken();
+
     await fetch(`http://localhost:5000/list/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify({ score: Number(editScore), status: editStatus }),
     });
     setEditId("");
     setScoreId("");
 
-    const response = await fetch("http://localhost:5000/list");
+    const response = await fetch("http://localhost:5000/list", {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
     const data = await response.json();
     setMediaList(data);
   };
@@ -237,9 +267,19 @@ function List({ editStatus, setStatus }) {
   // including the anime's ID meaning headers/body needed since no additional data is required 
   // After the request is successful, it updates the local list by removing the deleted anime 
   const handleDelete = async (idDelete) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const token = await user.getIdToken();
+
     await fetch(`http://localhost:5000/list/${idDelete}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}` // Authorization needed to verify which user is making the request
+      }
     });
+
 
     const updateList = mediaList.filter((media) => media.id != idDelete);
     setMediaList(updateList);
@@ -254,9 +294,11 @@ function List({ editStatus, setStatus }) {
     return "status-" + status.toLowerCase().replaceAll(" ", "-");
   }
 
-  const sortedList = getSortedList(filteredList, sortBy);
+  const sortedList = getSortedList(filteredList || [], sortBy);
 
   function getSortedList(filteredList, sortBy) {
+    if (!Array.isArray(filteredList)) return [];
+
     let sortedList = [...filteredList]; // Creates a copy of the original list
 
     if (sortBy == 'Title (A-Z)') {
@@ -374,7 +416,7 @@ function List({ editStatus, setStatus }) {
                   <p className='type-list'><strong>Type:</strong> {media.format}</p>
                   <button className="edit-list-button" onClick={() => {
                     setEditId(media.id);
-                    setScoreId(media.score.toString());
+                    setScoreId(media.score != null ? media.score.toString() : "");
                     setStatus(media.status);
                   }}>Edit</button>
                   <button className="delete-list-button" onClick={() => handleDelete(media.id)}>Delete</button>

@@ -118,7 +118,7 @@ def add_list():
     # Gets JSON data from body of incoming HTTP request to store in data variable 
     data = request.get_json()
 
-    # Checks if anime is already in user list 
+    # Checks if anime is already in user list
     existing = Anime.query.filter_by(user_id=uid, anilist_id=data["anilist_id"]).first()
     if existing:
         return jsonify({"error": "Anime already in your list"}), 409
@@ -153,11 +153,20 @@ def delete_list(show_id):
         return jsonify({"error": "Invalid token"}), 401
 
 
+    
+
     item = Anime.query.get(show_id) # Find anime entry in database with id 
+ 
     if not item:
-        abort(404, description="Anime not found") 
+      return jsonify({"error": "Anime not found"}), 404
+
+        # Check that the anime belongs to the current user
+    if item.user_id != uid:
+      return jsonify({"error": "Unauthorized"}), 403
+
     db.session.delete(item) # deletes show entry with same anime id
     db.session.commit() # commit changes to database 
+
     return jsonify({'message': 'Anime deleted'}), 200
 
 
@@ -175,20 +184,24 @@ def update_score(show_id):
     except Exception:
         return jsonify({"error": "Invalid token"}), 401
 
-
-
-def update_score(show_id): 
-    item = Anime.query.get(show_id)
-    if not item:
-        return jsonify({"error": "Not found"}), 404
     data = request.get_json()
-    new_score = data.get("score")
-    new_status = data.get("status")
-    item.score = new_score
-    item.status = new_status 
+    item = Anime.query.get(show_id)
+
+    if not item:
+        return jsonify({"error": "Anime not found"}), 404
+
+    if item.user_id != uid:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    item.score = data.get("score", item.score)
+    item.status = data.get("status", item.status)
 
     db.session.commit()
-    return jsonify({'message': 'saved'}), 200
+
+    return jsonify({"message": "Anime updated"}), 200
+
+
+
 
 @app.route('/profile', methods=['GET'])
 def view_profile(): 
@@ -204,16 +217,44 @@ def view_profile():
         return jsonify({"error": "Invalid token"}), 401
 
     show_list = Anime.query.filter_by(user_id=uid).all() # Makes sure that each user only sees anime on their account
+    
+    
     time_watched = 0
+    total_entries = len(show_list)
     episodes_watched = 0
+    
+    status_counts = {
+        "Watching": 0,
+        "Completed": 0,
+        "On Hold": 0, 
+        "Dropped": 0,
+        "Plan to Watch": 0
+    }
+
+    scores = []
+    
+    
     for show in show_list: 
         time_watched += show.episodes * 24
         episodes_watched += show.episodes
-    total_days = round(time_watched/1440, 2)
+        total_days = round(time_watched/1440, 2)
+        show_scores = [show.score for show in show_list if isinstance(show.score, int)]
+    if show.status in status_counts:
+        status_counts[show.status] += 1
+    
+    if show_scores:
+        mean_score = round(sum(show_scores) / len(show_scores), 2) 
+    else: 
+        mean_score = 0.0
     
     return jsonify({
-        "total": total_days, # becomes data.total in React with total being the key
-        "episodes": episodes_watched # becomes data.episodes in React with episodes being the key
+        "total_days": total_days, # becomes data.total in React with total being the key
+        "episodes": episodes_watched, # becomes data.episodes in React with episodes being the key
+        "mean_score": mean_score,
+        "total_entries": total_entries,
+        "episodes_watched": episodes_watched,
+        "status_counts": status_counts
+        
         }), 200
 
 @app.route('/anilist/trending', methods=['GET'])

@@ -37,17 +37,23 @@ As a fan of anime and an aspiring full-stack developer, I wanted to build a comp
 ## Installation 
 
 1. Clone the Repository
-  ```bash
-  git clone https://github.com/yourusername/animeshelf.git
-  cd animeshelf
+```
+bash
+git clone https://github.com/yourusername/animeshelf.git
+cd animeshelf
+```
 2. Frontend Setup
-  - cd frontend
-  - npm install
-  - npm start
+```
+cd frontend
+npm install
+npm start
+```
 3. Backend Setup
-  - cd backend
-  - pip install -r requirements.txt
-  - python app.py
+```
+cd backend
+pip install -r requirements.txt
+python app.py
+```
 
 ## Usage 
 - Login/Register using Firebase
@@ -58,17 +64,27 @@ As a fan of anime and an aspiring full-stack developer, I wanted to build a comp
 
 ## Screenshots 
 
+
 ### HomePage
+
 <img src="https://github.com/user-attachments/assets/3aae5788-0ead-4c9f-b4af-fe534a95dbe9" width="600"/>
 
+
 ### Anime Detail Page
+
 <img src="https://github.com/user-attachments/assets/21497d3a-c2f1-41f3-a408-17606d2edfc0" width="600"/> 
 
+
 ### MyList Page
+
 <img src="https://github.com/user-attachments/assets/25b03c93-9faf-457a-b233-fff0b4b2f3ff" width="600"/>
 
+
 ### Profile Stats
+
 <img src="https://github.com/user-attachments/assets/6f29deb9-40f5-468e-a584-1fe00c3848e5" width="600"/>
+
+
 
 ## Credits 
 - AniList GraphQL API

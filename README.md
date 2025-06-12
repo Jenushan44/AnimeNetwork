@@ -37,9 +37,9 @@ As a fan of anime and an aspiring full-stack developer, I wanted to build a comp
 ## Installation 
 
 1. Clone the Repository
-  - ```bash
-  - git clone https://github.com/yourusername/animeshelf.git
-  - cd animeshelf
+  ```bash
+  git clone https://github.com/yourusername/animeshelf.git
+  cd animeshelf
 2. Frontend Setup
   - cd frontend
   - npm install

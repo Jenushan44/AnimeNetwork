@@ -74,7 +74,7 @@ function ProfilePage() {
 
 
       <div className="recent-section">
-        <h3>Last 10 Added</h3>
+        <h3>Your Latest Picks</h3>
         <div className="recent-grid">
           {stats.recent_entries?.map((anime, index) => (
             <Link to={`/details/${anime.id}`} key={index} className="recent-card">

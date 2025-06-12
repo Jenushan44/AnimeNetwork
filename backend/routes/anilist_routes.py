@@ -171,3 +171,65 @@ def fetch_next_season():
     )
 
     return jsonify(response.json()), 200
+
+@anilist_blueprint.route('/details/<int:anime_id>', methods=['GET'])
+def get_anime_details(anime_id):
+    query = '''
+    query ($id: Int) {
+      Media(id: $id, type: ANIME) {
+        id
+        title {
+          english
+        }
+        episodes
+        format
+        duration
+        description(asHtml: false)
+        season
+        seasonYear
+        coverImage {
+          large
+        }
+        trailer {
+          id
+          site
+          thumbnail
+        }
+        startDate {
+          year
+          month
+          day
+        }
+        endDate {
+          year
+          month
+          day
+        }
+        genres
+        characters(perPage: 20) {
+          edges {
+            role
+            node {
+              id
+              name {
+                full
+              }
+              image {
+                medium
+              }
+            }
+          }
+        }
+      }
+    }
+    '''
+    variables = {"id": anime_id}
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(
+        "https://graphql.anilist.co",
+        json={"query": query, "variables": variables},
+        headers=headers
+    )
+
+    return jsonify(response.json())

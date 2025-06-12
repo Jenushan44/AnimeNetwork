@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import { getCurrentSeason, formatDate } from "../utils/date";
+import { useLocation } from "react-router-dom";
+
 
 function Home() {
 
@@ -14,6 +16,8 @@ function Home() {
   const [currentList, setCurrentList] = useState("all");
   const { gridRef, scrollLeft, scrollRight } = useHorizontalScroll();
   const [popupMessage, setPopupMessage] = useState("");
+  const location = useLocation();
+
 
   function Next() {
     if (bannerIndex === trending.length - 1) {
@@ -33,7 +37,12 @@ function Home() {
   }
 
   useEffect(() => {
-    fetch("http://localhost:5000/anilist/trending")
+
+    const controller = new AbortController(); // Lets you abort a fetch request if no longer needed
+
+    fetch("http://localhost:5000/anilist/trending", {
+      signal: controller.signal, // links the fetch request to the controller so it can be cancelled later
+    })
       .then(res => res.json())
       .then(data => {
         if (data?.data?.Page?.media) {
@@ -42,8 +51,19 @@ function Home() {
           console.error("AniList API error:", data);
         }
       })
-      .catch(err => console.error("Network Error:", err));
-  }, []);
+      .catch(err => {
+        if (err.name === "AbortError") {
+          console.log("Fetch aborted")
+        } else {
+          console.error("Network Error:", err);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+
+  }, [location.pathname]);
 
 
   useEffect(() => {

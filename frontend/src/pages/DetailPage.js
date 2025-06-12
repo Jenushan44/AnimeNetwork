@@ -71,28 +71,45 @@ const DetailPage = ({ editStatus, setStatus, setPopupMsg }) => {
 
 
   useEffect(() => {
+
+    const controller = new AbortController();
+
     const fetchAnime = async () => {
       try {
-        const response = await fetch("https://graphql.anilist.co", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          },
-          body: JSON.stringify({
-            query: query,
-            variables: { id: Number(id) }
-          })
+        const response = await fetch(`http://localhost:5000/anilist/details/${id}`, {
+          signal: controller.signal
         });
 
         const result = await response.json();
-        setValueData(result.data.Media);
+
+        if (result?.data?.Media) {
+          setValueData(result.data.Media);
+        } else {
+          console.error("AniList data missing:", result);
+        }
+
+
+        if (result?.data?.Media) {
+          setValueData(result.data.Media);
+        } else {
+          console.error("AniList API error:", result);
+        }
       } catch (error) {
-        console.error("Failed to fetch anime:", error);
+        if (error.name === "AbortError") {
+          console.log("Fetch aborted");
+        } else {
+          console.error("Failed to fetch anime:", error);
+        }
       }
     };
 
+
     fetchAnime();
+
+    return () => {
+      controller.abort();
+    };
+
   }, [id]);
 
   return (

@@ -49,8 +49,6 @@ function ProfilePage() {
     }]
   };
 
-
-
   return (
     <div className="profile-container">
       <h1 className="profile-title">Anime Stats</h1>
@@ -71,7 +69,6 @@ function ProfilePage() {
           <Doughnut data={chartData} />
         </div>
       </div>
-
 
       <div className="recent-section">
         <h3>Your Latest Picks</h3>

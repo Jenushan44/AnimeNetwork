@@ -54,10 +54,8 @@ function SearchResults() {
       setResults(json.data.Page.media);
     };
 
-
     fetchData();
   }, [query]);
-
 
   return (
     <div>
@@ -70,16 +68,13 @@ function SearchResults() {
         <button className="search-special" onClick={() => setFilter("SPECIAL")}>Special</button>
       </div>
 
-
       <div className="search-list">
         {results
-
           .filter(anime => filter === "All" || anime.format === filter)
           .map((anime) => {
             const scoreRank = anime.rankings?.find(
               (r) => r.type === "RATED" && r.allTime
             );
-
             return (
               <Link to={`/details/${anime.id}`} key={anime.id} style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="anime-entry">
@@ -92,21 +87,17 @@ function SearchResults() {
                     <h3 className="search-title">
                       {anime.title?.english || anime.title?.romaji || anime.title?.native || "Title not found"}
                     </h3>
-
                     <div className="search-info-row">
                       <p className="search-format"><strong>{anime.format}</strong></p>
                       <p className="search-episode">({anime.episodes} episodes)</p>
                     </div>
-
                     <div className="search-score-rank">
                       <p className="search-scored">
                         Scored: {(anime.averageScore / 10).toFixed(2) || "N/A"}
                       </p>
                       <p className="search-rank">Rank: {scoreRank ? `#${scoreRank.rank}` : "Not Ranked"}</p>
                     </div>
-
                     <button onClick={() => handleAddShelf(anime)} className="add-list-btn">Add to list</button>
-
                   </div>
                 </div>
               </Link>

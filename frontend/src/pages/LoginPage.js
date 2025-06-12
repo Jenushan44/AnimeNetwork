@@ -61,7 +61,6 @@ function LoginPage() {
         .catch(err => setError(getFirebaseErrorMessage(err.code)))
         .finally(() => setLoading(false));
     }
-
   }
 
   function handleGoogleLogin() {
@@ -82,7 +81,6 @@ function LoginPage() {
       .finally(() => {
         setLoading(false);
       });
-
   }
 
   function handleForgotPassword() {
@@ -103,10 +101,7 @@ function LoginPage() {
   return (
     <div className="register-container">
       <h1 className="register-title">Login</h1>
-
       <form className="register-form" onSubmit={handleSubmit}>
-
-
         <label htmlFor="email">Email:</label>
         <input
           id="email"
@@ -115,7 +110,6 @@ function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
         />
-
         <label htmlFor="password">Password:</label>
         <input
           id="password"
@@ -129,7 +123,6 @@ function LoginPage() {
           <button type="button" onClick={handleForgotPassword} className="forgot-password-button">Forgot Password?</button>
         </div>
 
-
         {error && <p className="login-error">{error}</p>}
 
         <button type='submit' className="primary-button" disabled={loading}>
@@ -142,7 +135,5 @@ function LoginPage() {
     </div>
   );
 }
-
-
 
 export default LoginPage;

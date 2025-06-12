@@ -90,9 +90,6 @@ def delete_list(show_id):
     except Exception:
         return jsonify({"error": "Invalid token"}), 401
 
-
-    
-
     item = Anime.query.get(show_id) # Find anime entry in database with id 
  
     if not item:

@@ -61,7 +61,6 @@ function RegisterPage() {
       .finally(() => {
         setLoading(false);
       });
-
   }
 
   function handleGoogleLogin() {
@@ -83,16 +82,12 @@ function RegisterPage() {
       .finally(() => {
         setLoading(false);
       });
-
   }
-
 
   return (
     <div className="register-container">
       <h1 className="register-title">Sign up</h1>
-
       <form className="register-form" onSubmit={handleSubmit}>
-
         <label htmlFor='username'>Username:</label>
         <input
           type="text"
@@ -100,7 +95,6 @@ function RegisterPage() {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter a username"
         />
-
         <label htmlFor="email">Email:</label>
         <input
           id="email"
@@ -109,7 +103,6 @@ function RegisterPage() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
         />
-
         <label htmlFor="password">Password:</label>
         <input
           id="password"
@@ -118,7 +111,6 @@ function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
         />
-
 
         {error && <p className="register-error">{error}</p>}
 

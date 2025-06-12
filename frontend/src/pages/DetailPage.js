@@ -4,9 +4,6 @@ import { handleAddShelf } from "../utils/api";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import { auth } from "../firebase";
 
-
-
-
 const query = `
   query ($id: Int) {
     Media(id: $id, type: ANIME) {
@@ -147,7 +144,7 @@ const DetailPage = ({ editStatus, setStatus, setPopupMsg }) => {
                 <div className="right-info">
                   <p><strong>Season: </strong> {valueData.season.charAt(0) + valueData.season.slice(1).toLowerCase()} {valueData.seasonYear}</p>
                   <p>
-                    <strong>Start Date: </strong> {" "} {/*Allows an empty space*/}
+                    <strong>Start Date: </strong> {" "}
                     {valueData.startDate?.year // checks if start date exists and has a year field
                       ? `${[
                         "", // index 0 not used 
@@ -167,7 +164,7 @@ const DetailPage = ({ editStatus, setStatus, setPopupMsg }) => {
                       : "Unknown"}
                   </p>
                   <p>
-                    <strong>End Date: </strong>{" "} <span style={{ marginLeft: "50px" }}></span>
+                    <strong>End Date: </strong>{" "}
                     {valueData.endDate?.year
                       ? `${[
                         "",

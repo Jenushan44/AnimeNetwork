@@ -12,8 +12,6 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import { auth } from "./firebase";
 
-
-
 function App() {
   const [editStatus, setStatus] = useState('');
   const [user, setUser] = useState(null); // store currently authenticated Firebase user

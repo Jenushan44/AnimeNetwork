@@ -30,9 +30,7 @@ def view_profile():
         "Dropped": 0,
         "Plan to Watch": 0
     }
-
     show_scores = []
-    
     
     for show in show_list: 
 
@@ -46,7 +44,6 @@ def view_profile():
             time_watched += episodes * duration 
 
         episodes_watched += episodes 
-
 
         if isinstance(show.score, int):
           show_scores.append(show.score)

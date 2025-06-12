@@ -162,14 +162,10 @@ function ListPage({ editStatus, setStatus }) {
           <option value="Score (Descending)">Score (Descending)</option>
           <option value="Oldest Added">Oldest Added</option>
           <option value="Newest Added">Newest Added</option>
-
         </select>
-
       </div>
 
-
       <div className="media-grid">
-
         {sortedList.map((media) => (
           <div key={media.id} className="media-entry" ref={location.state?.editId === media.anilist_id ? scrollReference : null}>
             {editId == media.id ? (

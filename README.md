@@ -4,14 +4,14 @@ AnimeNetwork is a full-stack media tracker inspired by MyAnimeList. Users can se
 Built using React, Flask, Firebase and the AniList GraphQL API 
 
 Table Of Contents 
-- [Motivation](#-motivation)
-- [Features](#-features)
-- [Technologies Used](#-technologies-used)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Screenshots](#-screenshots)
-- [Future Improvements](#-future-improvements)
-- [Credits](#-credits)
+- [Motivation](#motivation)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Future Improvements](#future-improvements)
+- [Credits](#credits)
 
 ## Motivation 
 
@@ -37,7 +37,7 @@ As a fan of anime and an aspiring full-stack developer, I wanted to build a comp
 ## Installation 
 
 1. Clone the Repository
-  - bash
+  - ```bash
   - git clone https://github.com/yourusername/animeshelf.git
   - cd animeshelf
 2. Frontend Setup

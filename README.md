@@ -62,7 +62,8 @@ HomePage
 <img src="https://github.com/user-attachments/assets/3aae5788-0ead-4c9f-b4af-fe534a95dbe9" width="600"/>
 
 Anime Detail Page
-<img src="https://github.com/user-attachments/assets/8d3eb1e4-7b1c-4a57-a2ef-d81948d43ebe" width="600"/>
+<img src="https://github.com/user-attachments/assets/21497d3a-c2f1-41f3-a408-17606d2edfc0" width="600"/> 
+
 
 My List Page
 <img src="https://github.com/user-attachments/assets/aafcddbc-13a9-45de-bec1-5636aa9aadd4" width="600"/>

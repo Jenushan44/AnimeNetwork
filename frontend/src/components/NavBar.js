@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import "./App.css";
+import "../App.css";
 import { useState } from 'react'
-import logo from './assets/anime-network-logo.png';
-import { auth } from "./firebase";
+import logo from '../assets/anime-network-logo.png';
+import { auth } from "../firebase";
 
 
 function NavBar({ user, handleLogout, setPopupMessage }) {

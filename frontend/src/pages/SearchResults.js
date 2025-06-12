@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import DetailPage from './DetailPage.js';
-import { handleAddShelf } from "./utils/api";
+import { handleAddShelf } from "../utils/api.js";
 
 function SearchResults() {
   const [searchParams] = useSearchParams();

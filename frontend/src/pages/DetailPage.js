@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
-import { handleAddShelf } from "./utils/api";
-import useHorizontalScroll from "./hooks/useHorizontalScroll";
-import { auth } from "./firebase";
+import { handleAddShelf } from "../utils/api";
+import useHorizontalScroll from "../hooks/useHorizontalScroll";
+import { auth } from "../firebase";
 
 
 

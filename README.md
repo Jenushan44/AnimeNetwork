@@ -1,3 +1,5 @@
+AnimeNetwork
+
 AnimeNetwork is a full-stack media tracker inspired by MyAnimeList. Users can search anime, view detailed information and manage a personalized shelf of what they're watching or have completed. 
 Built using React, Flask, Firebase and the AniList GraphQL API 
 
@@ -13,7 +15,7 @@ Table Of Contents
 
 ## Motivation 
 
-As a fan of anime and an aspring full-stack developer, I wanted to build a complete application that mimics the core functionality of a real media tracking site. The goal was to combine modern frontend/backend development with user authentication and personalized experiences.
+As a fan of anime and an aspiring full-stack developer, I wanted to build a complete application that mimics the core functionality of a real media tracking site. The goal was to combine modern frontend/backend development with user authentication and personalized experiences.
 
 ## Features 
 - Search anime by title using the AniList API
@@ -56,8 +58,11 @@ As a fan of anime and an aspring full-stack developer, I wanted to build a compl
 
 ## Screenshots 
 ![image](https://github.com/user-attachments/assets/3aae5788-0ead-4c9f-b4af-fe534a95dbe9)
+
 ![image](https://github.com/user-attachments/assets/8d3eb1e4-7b1c-4a57-a2ef-d81948d43ebe)
+
 ![image](https://github.com/user-attachments/assets/aafcddbc-13a9-45de-bec1-5636aa9aadd4)
+
 ![image](https://github.com/user-attachments/assets/6f29deb9-40f5-468e-a584-1fe00c3848e5)
 
 ## Credits 

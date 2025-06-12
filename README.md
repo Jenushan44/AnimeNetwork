@@ -57,13 +57,18 @@ As a fan of anime and an aspiring full-stack developer, I wanted to build a comp
 - Visit your profile to view anime statistics and recent activity
 
 ## Screenshots 
-![image](https://github.com/user-attachments/assets/3aae5788-0ead-4c9f-b4af-fe534a95dbe9)
 
-![image](https://github.com/user-attachments/assets/8d3eb1e4-7b1c-4a57-a2ef-d81948d43ebe)
+HomePage
+<img src="https://github.com/user-attachments/assets/3aae5788-0ead-4c9f-b4af-fe534a95dbe9" width="600"/>
 
-![image](https://github.com/user-attachments/assets/aafcddbc-13a9-45de-bec1-5636aa9aadd4)
+Anime Detail Page
+<img src="https://github.com/user-attachments/assets/8d3eb1e4-7b1c-4a57-a2ef-d81948d43ebe" width="600"/>
 
-![image](https://github.com/user-attachments/assets/6f29deb9-40f5-468e-a584-1fe00c3848e5)
+My List Page
+<img src="https://github.com/user-attachments/assets/aafcddbc-13a9-45de-bec1-5636aa9aadd4" width="600"/>
+
+Profile Stats
+<img src="https://github.com/user-attachments/assets/6f29deb9-40f5-468e-a584-1fe00c3848e5" width="600"/>
 
 ## Credits 
 - AniList GraphQL API

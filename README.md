@@ -1,4 +1,4 @@
-## AnimeNetwork
+# AnimeNetwork
 
 AnimeNetwork is a full-stack media tracker inspired by MyAnimeList. Users can search anime, view detailed information and manage a personalized shelf of what they're watching or have completed. 
 Built using React, Flask, Firebase and the AniList GraphQL API 
